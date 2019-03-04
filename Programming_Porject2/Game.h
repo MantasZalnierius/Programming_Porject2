@@ -3,12 +3,19 @@
 
 #include <SFML/Graphics.hpp>
 #include "Globals.h"
+#include "Ghost.h"
+#include "Pellet.h"
+#include "Player.h"
+#include "Cell.h"
+#include "PowerUp.h"
 
 class Game
 {
 	bool m_gameExit;
 	sf::RenderWindow m_window;
 	int levelData[MAX_ROWS][MAX_COLS];
+	Cell cellType[MAX_ROWS][MAX_COLS];
+	Player player;
 
 public:	  // declaration of member functions	
 	Game(); // This is the default constructor for the game class.

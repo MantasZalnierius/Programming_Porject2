@@ -2,8 +2,8 @@
 #define GLOBALS
 
 
-static const int MAX_ROWS = 15;
-static const int MAX_COLS = 20;
+static const int MAX_ROWS = 25;
+static const int MAX_COLS = 25;
 
 
 #endif
