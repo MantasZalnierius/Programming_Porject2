@@ -15,37 +15,71 @@ void Player::setUpSprite()
 	{
 		std::cout << "Error ";
 	}
-
+	row = 22;
+	col = 2;
 	m_sprite.setTexture(m_texture);
 	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 31, 35 });
-	m_sprite.setPosition(400, 700);
-
+	m_sprite.setPosition(col * 32, row * 32);
 	m_velocity = { 0.0f, 0.0f };
 }
 
-void Player::move()
+void Player::move(int t_levelDate[][MAX_COLS])
 {
-	m_velocity = sf::Vector2f{ 0.0f, 0.0f };
 
+	if (direction == 1)
+	{
+		if (t_levelDate[row][col - 1] != 1)
+		{
+			col--;
+		}
+	}
+
+	if (direction == 2)
+	{
+		if (t_levelDate[row][col + 1] != 1)
+		{
+			col++;
+		}
+	}
+
+	if (direction == 3)
+	{
+		if (t_levelDate[row - 1][col] != 1)
+		{
+			row--;
+		}
+	}
+
+	if (direction == 4)
+	{
+		if (t_levelDate[row + 1][col] != 1)
+		{
+			row++;
+		}
+	}
+
+	m_sprite.setPosition(col * 32, row * 32);
+}
+
+void Player::setDirection()
+{
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		m_velocity.x = -5.0f; // This sets the X velocity to -5.0.
+		direction = 1;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		m_velocity.x = 5.0f; // This sets the X velocity to 5.0.
+		direction = 2;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		m_velocity.y = -5.0f; // This sets the Y velocity to -5.0.
+		direction = 3;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		m_velocity.y = 5.0f; // This sets the Y velocity to 5.0.
+		direction = 4;
 	}
-
-	m_sprite.move(m_velocity);
 }

@@ -116,7 +116,11 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close(); // This closes the window.
 	}
 
-	player.move();
+	player.setCol(player.getBody().getPosition().x / 32);
+	player.setRow(player.getBody().getPosition().y / 32);
+
+	player.setDirection();
+	player.move(levelData);
 }
 
 
