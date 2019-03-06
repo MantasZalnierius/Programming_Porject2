@@ -26,39 +26,75 @@ void Player::setUpSprite()
 void Player::move(int t_levelDate[][MAX_COLS])
 {
 
+	//if (direction == 1)
+	//{
+	//	if (t_levelDate[row][col - 1] != 1)
+	//	{
+	//		col--;
+	//	}
+	//}
+
+	//if (direction == 2)
+	//{
+	//	if (t_levelDate[row][col + 1] != 1)
+	//	{
+	//		col++;
+	//	}
+	//}
+
+	//if (direction == 3)
+	//{
+	//	if (t_levelDate[row - 1][col] != 1)
+	//	{
+	//		row--;
+	//	}
+	//}
+
+	//if (direction == 4)
+	//{
+	//	if (t_levelDate[row + 1][col] != 1)
+	//	{
+	//		row++;
+	//	}
+	//}
+
+	//m_sprite.setPosition(col * 32, row * 32);
+
+	m_velocity = sf::Vector2f{ 0.0f, 0.0f };
+
 	if (direction == 1)
 	{
-		if (t_levelDate[row][col - 1] != 1)
+		if (t_levelDate[row][--col] != 1)
 		{
-			col--;
+			m_velocity = { -5.0f, 0.0 };
 		}
 	}
 
 	if (direction == 2)
 	{
-		if (t_levelDate[row][col + 1] != 1)
+		if (t_levelDate[row][++col] != 1)
 		{
-			col++;
+			m_velocity = { 5.0f, 0.0 };
 		}
 	}
 
 	if (direction == 3)
 	{
-		if (t_levelDate[row - 1][col] != 1)
+		if (t_levelDate[--row][col] != 1)
 		{
-			row--;
+			m_velocity = { 0.0f, -5.0f };
 		}
 	}
 
 	if (direction == 4)
 	{
-		if (t_levelDate[row + 1][col] != 1)
+		if (t_levelDate[++row][col] != 1)
 		{
-			row++;
+			m_velocity = { 0.0f, 5.0f };
 		}
 	}
 
-	m_sprite.setPosition(col * 32, row * 32);
+	m_sprite.move(m_velocity);
 }
 
 void Player::setDirection()
