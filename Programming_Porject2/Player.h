@@ -15,6 +15,8 @@ class Player
 	int col;
 	int direction;
 	sf::Vector2f m_velocity;
+	int speed = 0;
+	bool right, left, up, down;
 
 public:
 	Player();

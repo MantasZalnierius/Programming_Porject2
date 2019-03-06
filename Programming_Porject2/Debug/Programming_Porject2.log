@@ -1,3 +1,7 @@
 ﻿  Player.cpp
 c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(108): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(114): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(126): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Programming_Porject2.vcxproj -> C:\Users\C00241626\Desktop\New folder\Programming_Porject2\Debug\Programming_Porject2.exe

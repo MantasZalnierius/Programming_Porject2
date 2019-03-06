@@ -119,7 +119,6 @@ void Game::update(sf::Time t_deltaTime)
 	player.setCol(player.getBody().getPosition().x / 32);
 	player.setRow(player.getBody().getPosition().y / 32);
 
-	player.setDirection();
 	player.move(levelData);
 }
 
@@ -159,6 +158,7 @@ void Game::processEvents()
 				m_gameExit = true;// This sets the bool to true.
 			}
 
+			player.setDirection();
 		}
 	}
 }
