@@ -30,6 +30,7 @@ void Player::move(int t_levelDate[][MAX_COLS])
 	{
 		if (t_levelDate[row][col - 1] != 1)
 		{
+			speed = 32;
 			m_sprite.move(-speed, 0);
 		}
 		else
@@ -42,6 +43,7 @@ void Player::move(int t_levelDate[][MAX_COLS])
 	{
 		if (t_levelDate[row][col + 1] != 1)
 		{
+			speed = 32;
 			m_sprite.move(speed, 0);
 		}
 		else
@@ -54,6 +56,7 @@ void Player::move(int t_levelDate[][MAX_COLS])
 	{
 		if (t_levelDate[row - 1][col] != 1)
 		{
+			speed = 32;
 			m_sprite.move(0, -speed);
 		}
 		else
@@ -66,6 +69,7 @@ void Player::move(int t_levelDate[][MAX_COLS])
 	{
 		if (t_levelDate[row + 1][col] != 1)
 		{
+			speed = 32;
 			m_sprite.move(0, speed);
 		}
 		else
@@ -80,24 +84,20 @@ void Player::setDirection()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		playerDirecrtions = Direction::Left;
-		speed = 32;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		playerDirecrtions = Direction::Right;
-		speed = 32;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		playerDirecrtions = Direction::Up;
-		speed = 32;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		playerDirecrtions = Direction::Down;
-		speed = 32;
 	}
 }
