@@ -4,6 +4,7 @@
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include "Globals.h"
+#include "Cell.h"
 
 enum class  Direction
 {
@@ -26,7 +27,9 @@ class Player
 	int direction;
 	sf::Vector2f m_velocity;
 	float speed = 0.0f;
-	bool right, left, up, down;
+	bool moving = false;
+
+
 
 public:
 	Player();
@@ -37,7 +40,7 @@ public:
 	inline int getCol() { return col; }
 	inline void setCol(int t_col) { col = t_col; }
 	inline void setRow(int t_row) { row = t_row; }
-	void move(int t_levelDate[][MAX_COLS]);
+	void move(Cell t_typeOfCell[][MAX_COLS]);
 	void setDirection();
 };
 

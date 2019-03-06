@@ -18,65 +18,48 @@ void Player::setUpSprite()
 	row = 22;
 	col = 2;
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 31, 35 });
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
 	m_sprite.setPosition(col * 32.0f, row * 32.0f);
 	m_velocity = { 0.0f, 0.0f };
 	speed = 32;
 }
 
-void Player::move(int t_levelDate[][MAX_COLS])
+void Player::move(Cell t_typeOfCell[][MAX_COLS])
 {
+	m_velocity = { 0.0, 0.0 };
 	if (playerDirecrtions == Direction::Left)
 	{
-		if (t_levelDate[row][col - 1] != 1)
+		if (t_typeOfCell[row][col - 1].getCell() != TypeOfCell::Wall)
 		{
-			speed = 32;
-			m_sprite.move(-speed, 0);
-		}
-		else
-		{
-			speed = 0;
+			m_velocity = { -32.0f, 0.0 };
 		}
 	}
 
 	else if (playerDirecrtions == Direction::Right)
 	{
-		if (t_levelDate[row][col + 1] != 1)
+		if (t_typeOfCell[row][col + 1].getCell() != TypeOfCell::Wall)
 		{
-			speed = 32;
-			m_sprite.move(speed, 0);
-		}
-		else
-		{
-			speed = 0;
+			m_velocity = { 32.0f, 0.0 };
 		}
 	}
 
 	else if (playerDirecrtions == Direction::Up)
 	{
-		if (t_levelDate[row - 1][col] != 1)
+		if (t_typeOfCell[row - 1][col].getCell() != TypeOfCell::Wall)
 		{
-			speed = 32;
-			m_sprite.move(0, -speed);
-		}
-		else
-		{
-			speed = 0;
+			m_velocity = { 0.0f, -32.0 };
 		}
 	}
 
-	if (playerDirecrtions == Direction::Down)
+	else if (playerDirecrtions == Direction::Down)
 	{
-		if (t_levelDate[row + 1][col] != 1)
+		if (t_typeOfCell[row + 1][col].getCell() != TypeOfCell::Wall)
 		{
-			speed = 32;
-			m_sprite.move(0, speed);
-		}
-		else
-		{
-			speed = 0;
+			m_velocity = { 0.0f, 32.0 };
 		}
 	}
+
+	m_sprite.move(m_velocity);
 }
 
 void Player::setDirection()
@@ -86,12 +69,12 @@ void Player::setDirection()
 		playerDirecrtions = Direction::Left;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		playerDirecrtions = Direction::Right;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		playerDirecrtions = Direction::Up;
 	}

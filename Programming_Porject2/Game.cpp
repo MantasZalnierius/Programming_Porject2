@@ -118,6 +118,18 @@ void Game::update(sf::Time t_deltaTime)
 
 	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
+
+
+	for (int row = 0; row < MAX_ROWS; row++)
+	{
+		for (int col = 0; col < MAX_COLS; col++)
+		{
+			if (cellType[row][col].getStatus() && cellType[row][col].getCell() == TypeOfCell::Pellet)
+			{
+				cellType[row][col].playerCollision(player.getBody());
+			}
+		}
+	}
 }
 
 
@@ -128,7 +140,10 @@ void Game::render()
 	{
 		for (int col = 0; col < MAX_COLS; col++)
 		{
-			cellType[row][col].draw(m_window, levelData[row][col]);
+			if (cellType[row][col].getStatus())
+			{
+				cellType[row][col].draw(m_window, levelData[row][col]);
+			}
 		}
 	}
 
@@ -142,7 +157,6 @@ void Game::processEvents()
 	sf::Event event; // This initialize's, the Event object into memory.
 	while (m_window.pollEvent(event))
 	{
-
 		if (sf::Event::Closed == event.type) // window message
 		{
 			m_window.close(); // This closes the window.
@@ -156,7 +170,8 @@ void Game::processEvents()
 			}
 
 			player.setDirection();
-			player.move(levelData);
+			player.move(cellType);
+
 		}
 	}
 }
