@@ -5,17 +5,27 @@
 #include <iostream>
 #include "Globals.h"
 
+enum class  Direction
+{
+	Up,
+	Down,
+	Left,
+	Right,
+	None
+};
+
 class Player
 {
 	sf::Sprite m_sprite;
 	sf::Texture m_texture;
+	Direction playerDirecrtions = Direction::None;
 	int m_speed;
 	bool m_isAlive;
 	int row;
 	int col;
 	int direction;
 	sf::Vector2f m_velocity;
-	int speed = 0;
+	float speed = 0.0f;
 	bool right, left, up, down;
 
 public:

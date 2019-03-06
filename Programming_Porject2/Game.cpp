@@ -20,7 +20,7 @@
 
 int main()
 {
-	srand(time(NULL)); // This is the random seed.
+	srand(static_cast<unsigned int>(time(NULL))); // This is the random seed.
 	Game game; // This makes an instance of the game class.
 	game.loadContent();
 	game.run();
@@ -116,10 +116,8 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close(); // This closes the window.
 	}
 
-	player.setCol(player.getBody().getPosition().x / 32);
-	player.setRow(player.getBody().getPosition().y / 32);
-
-	player.move(levelData);
+	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
+	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
 }
 
 
@@ -154,11 +152,11 @@ void Game::processEvents()
 		{
 			if (sf::Keyboard::Escape == event.key.code) // This checks if the user escaped the game.
 			{
-				
 				m_gameExit = true;// This sets the bool to true.
 			}
 
 			player.setDirection();
+			player.move(levelData);
 		}
 	}
 }
