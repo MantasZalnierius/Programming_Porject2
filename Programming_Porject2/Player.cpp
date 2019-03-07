@@ -21,6 +21,7 @@ void Player::setUpSprite()
 	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
 	m_sprite.setPosition(m_col * 32.0f, m_row * 32.0f);
 	m_velocity = { 0.0f, 0.0f };
+	m_speed = 32.0f;
 	
 }
 
@@ -32,8 +33,7 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 	{
 		if (t_typeOfCell[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { -32.0f, 0.0 };
-			m_sprite.move(m_velocity);
+			m_velocity = { -m_speed, 0.0 };
 		}
 	}
 
@@ -41,8 +41,7 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 	{
 		if (t_typeOfCell[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { 32.0f, 0.0 };
-			m_sprite.move(m_velocity);
+			m_velocity = { m_speed, 0.0 };
 		}
 	}
 
@@ -50,8 +49,7 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 	{
 		if (t_typeOfCell[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { 0.0f, -32.0 };
-			m_sprite.move(m_velocity);
+			m_velocity = { 0.0f, -m_speed };
 		}
 	}
 
@@ -59,31 +57,31 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 	{
 		if (t_typeOfCell[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { 0.0f, 32.0 };
-			m_sprite.move(m_velocity);
+			m_velocity = { 0.0f, m_speed };
 		}
 	}
 
+	m_sprite.move(m_velocity);
 }
 
-void Player::setDirection()
+void Player::setDirection(sf::Event t_event)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (t_event.key.code == sf::Keyboard::A || t_event.key.code == sf::Keyboard::Left)
 	{
 		m_playerDirecrtions = Direction::Left;
 	}
 
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (t_event.key.code == sf::Keyboard::D || t_event.key.code == sf::Keyboard::Right)
 	{
 		m_playerDirecrtions = Direction::Right;
 	}
 
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (t_event.key.code == sf::Keyboard::Up || t_event.key.code == sf::Keyboard::W)
 	{
 		m_playerDirecrtions = Direction::Up;
 	}
 
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (t_event.key.code == sf::Keyboard::S || t_event.key.code == sf::Keyboard::Down)
 	{
 		m_playerDirecrtions = Direction::Down;
 	}

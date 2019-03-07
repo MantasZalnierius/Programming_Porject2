@@ -20,7 +20,7 @@ class Player
 	sf::Sprite m_sprite;
 	sf::Texture m_texture;
 	Direction m_playerDirecrtions = Direction::None;
-	int m_speed;
+	float m_speed;
 	bool m_isAlive;
 	int m_row;
 	int m_col;
@@ -39,7 +39,9 @@ public:
 	inline void setCol(int t_col) { m_col = t_col; }
 	inline void setRow(int t_row) { m_row = t_row; }
 	void move(Cell t_typeOfCell[][MAX_COLS]);
-	void setDirection();
+	inline Direction getDirection() { return m_playerDirecrtions; }
+	void setDirection(sf::Event t_event);
+	inline void sets(Direction t_playerDirection) { m_playerDirecrtions = t_playerDirection; }
 };
 
 #endif

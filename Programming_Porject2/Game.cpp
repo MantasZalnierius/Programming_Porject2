@@ -119,7 +119,11 @@ void Game::update(sf::Time t_deltaTime)
 	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
 
-	player.setDirection();
+	if (player.getDirection() != Direction::None)
+	{
+		player.move(cellType);
+		player.sets(Direction::None);
+	}
 
 	for (int row = 0; row < MAX_ROWS; row++)
 	{
@@ -163,14 +167,20 @@ void Game::processEvents()
 		{
 			m_window.close(); // This closes the window.
 		}
-
+		
+		
 		if (sf::Event::KeyPressed == event.type) //user key press
 		{
 			if (sf::Keyboard::Escape == event.key.code) // This checks if the user escaped the game.
 			{
 				m_gameExit = true;// This sets the bool to true.
 			}
-			player.move(cellType);
+			if (player.getDirection() == Direction::None)
+			{
+				player.setDirection(event);
+			}
+		
+			
 		}
 	}
 }
