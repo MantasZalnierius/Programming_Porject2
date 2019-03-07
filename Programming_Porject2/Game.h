@@ -9,14 +9,25 @@
 #include "Cell.h"
 #include "PowerUp.h"
 
+enum class GameScreens
+{
+	EnterName,
+	MainMenu,
+	GamePlay
+};
 
 class Game
 {
+	sf::String playerInput;
 	bool m_gameExit;
+	int score;
 	sf::RenderWindow m_window;
 	int levelData[MAX_ROWS][MAX_COLS];
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
+	GameScreens gameStates = GameScreens::EnterName;
+	sf::Font font;
+	sf::Text enterNameText;
 
 public:	  // declaration of member functions	
 	Game(); // This is the default constructor for the game class.
@@ -28,6 +39,7 @@ public:	  // declaration of member functions
 	void	render(); // This member function renders the game.
 	void	processEvents(); // This member function process user created events.
 	void	setUpGame();
+	void	setUpText();
 };
 
 

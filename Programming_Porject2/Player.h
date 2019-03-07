@@ -33,6 +33,7 @@ public:
 	Player();
 	~Player();
 	void setUpSprite();
+	void pelletCollision(sf::Sprite t_pellet, int &t_score);
 	inline sf::Sprite getBody() { return m_sprite; }
 	inline int getRow() { return m_row; }
 	inline int getCol() { return m_col; }

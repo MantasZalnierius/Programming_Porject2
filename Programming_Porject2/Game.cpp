@@ -34,6 +34,9 @@ m_gameExit{ false }
 {
 	// This sets up the game.
 	setUpGame();
+	setUpText();
+
+
 }
 
 
@@ -74,7 +77,22 @@ void Game::setUpGame()
 			cellType[row][col].setUpSprites(levelData[row][col], row, col);
 		}
 	}
+}
 
+void Game::setUpText()
+{
+	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
+	{
+		std::cout << "Error ";
+	}
+
+	playerInput = "Enter your name: ";
+	enterNameText.setFont(font);
+	enterNameText.setCharacterSize(40);
+	enterNameText.setString(playerInput);
+	enterNameText.setPosition(250.0f, 370.0f);
+	
+	score = 0;
 }
 
 
@@ -115,26 +133,33 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close(); // This closes the window.
 	}
-
-	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
-	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
-
-	if (player.getDirection() != Direction::None)
+	if (gameStates == GameScreens::GamePlay)
 	{
-		player.move(cellType);
-		player.sets(Direction::None);
-	}
+		std::cout << score;
+		player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
+		player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
 
-	for (int row = 0; row < MAX_ROWS; row++)
-	{
-		for (int col = 0; col < MAX_COLS; col++)
+		if (player.getDirection() != Direction::None)
 		{
-			if (cellType[row][col].getStatus() && cellType[row][col].getCell() == TypeOfCell::Pellet)
+			player.move(cellType);
+			player.sets(Direction::None);
+		}
+
+		for (int row = 0; row < MAX_ROWS; row++)
+		{
+			for (int col = 0; col < MAX_COLS; col++)
 			{
-				cellType[row][col].playerCollision(player.getBody());
+				if (cellType[row][col].getStatus() && cellType[row][col].getCell() == TypeOfCell::Pellet)
+				{
+					cellType[row][col].playerCollision(player.getBody());
+					player.pelletCollision(cellType[row][col].getBody(), score);
+				}
 			}
 		}
+
+	
 	}
+	
 
 }
 
@@ -142,18 +167,25 @@ void Game::update(sf::Time t_deltaTime)
 void Game::render()
 {
 	m_window.clear(); // This clears all the screen.
-	for (int row = 0; row < MAX_ROWS; row++)
+	if (gameStates == GameScreens::GamePlay)
 	{
-		for (int col = 0; col < MAX_COLS; col++)
+		for (int row = 0; row < MAX_ROWS; row++)
 		{
-			if (cellType[row][col].getStatus())
+			for (int col = 0; col < MAX_COLS; col++)
 			{
-				cellType[row][col].draw(m_window, levelData[row][col]);
+				if (cellType[row][col].getStatus())
+				{
+					cellType[row][col].draw(m_window, levelData[row][col]);
+				}
 			}
 		}
+		m_window.draw(player.getBody());
 	}
-
-	m_window.draw(player.getBody());
+	
+	if (gameStates == GameScreens::EnterName)
+	{
+		m_window.draw(enterNameText);
+	}
 	m_window.display(); // This displays everything.
 }
 
@@ -175,12 +207,47 @@ void Game::processEvents()
 			{
 				m_gameExit = true;// This sets the bool to true.
 			}
-			if (player.getDirection() == Direction::None)
+			if (gameStates == GameScreens::GamePlay)
 			{
-				player.setDirection(event);
+				if (player.getDirection() == Direction::None)
+				{
+					player.setDirection(event);
+				}
 			}
-		
-			
+		}
+
+		if (event.type == sf::Event::TextEntered)
+		{
+			if (event.text.unicode >= 'a' && event.text.unicode <= 'z' || event.text.unicode >= 'A' && event.text.unicode <= 'Z')
+			{
+				playerInput += event.text.unicode;
+				enterNameText.setString(playerInput);
+			}
+		}
+
+		if (playerInput != "Enter your name: ")
+		{
+			if (sf::Event::KeyPressed == event.type) //user key press
+			{
+				if (sf::Keyboard::Enter == event.key.code)
+				{
+					{
+						gameStates = GameScreens::GamePlay;
+					}
+					
+				}
+			}
+		}
+		else
+		{
+			if (sf::Event::KeyPressed == event.type)
+			{
+				if (sf::Keyboard::Enter == event.key.code)
+				{
+					playerInput = "Enter your name: ";
+					enterNameText.setString(playerInput);
+				}
+			}
 		}
 	}
 }
