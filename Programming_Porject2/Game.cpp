@@ -119,6 +119,7 @@ void Game::update(sf::Time t_deltaTime)
 	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
 
+	player.setDirection();
 
 	for (int row = 0; row < MAX_ROWS; row++)
 	{
@@ -130,6 +131,7 @@ void Game::update(sf::Time t_deltaTime)
 			}
 		}
 	}
+
 }
 
 
@@ -168,10 +170,7 @@ void Game::processEvents()
 			{
 				m_gameExit = true;// This sets the bool to true.
 			}
-
-			player.setDirection();
 			player.move(cellType);
-
 		}
 	}
 }

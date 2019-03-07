@@ -19,15 +19,13 @@ class Player
 {
 	sf::Sprite m_sprite;
 	sf::Texture m_texture;
-	Direction playerDirecrtions = Direction::None;
+	Direction m_playerDirecrtions = Direction::None;
 	int m_speed;
 	bool m_isAlive;
-	int row;
-	int col;
-	int direction;
+	int m_row;
+	int m_col;
+	int m_direction;
 	sf::Vector2f m_velocity;
-	float speed = 0.0f;
-	bool moving = false;
 
 
 
@@ -36,10 +34,10 @@ public:
 	~Player();
 	void setUpSprite();
 	inline sf::Sprite getBody() { return m_sprite; }
-	inline int getRow() { return row; }
-	inline int getCol() { return col; }
-	inline void setCol(int t_col) { col = t_col; }
-	inline void setRow(int t_row) { row = t_row; }
+	inline int getRow() { return m_row; }
+	inline int getCol() { return m_col; }
+	inline void setCol(int t_col) { m_col = t_col; }
+	inline void setRow(int t_row) { m_row = t_row; }
 	void move(Cell t_typeOfCell[][MAX_COLS]);
 	void setDirection();
 };
