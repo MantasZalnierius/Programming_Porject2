@@ -29,7 +29,6 @@ void Player::pelletCollision(sf::Sprite t_pellet, int &t_score)
 {
 	if (t_pellet.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
 	{
-		std::cout << "Hi ";
 		t_score += 2;
 	}
 }

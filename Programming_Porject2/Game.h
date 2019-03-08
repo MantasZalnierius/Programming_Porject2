@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Globals.h"
+#include <string>
 #include "Ghost.h"
 #include "Pellet.h"
 #include "Player.h"
@@ -18,7 +19,8 @@ enum class GameScreens
 
 class Game
 {
-	sf::String playerInput;
+	std::string playerInput;
+	std::string man;
 	bool m_gameExit;
 	int score;
 	sf::RenderWindow m_window;
@@ -40,6 +42,7 @@ public:	  // declaration of member functions
 	void	processEvents(); // This member function process user created events.
 	void	setUpGame();
 	void	setUpText();
+	void	UserEnterText(sf::Event t_event);
 };
 
 

@@ -87,6 +87,7 @@ void Game::setUpText()
 	}
 
 	playerInput = "Enter your name: ";
+	man = "";
 	enterNameText.setFont(font);
 	enterNameText.setCharacterSize(40);
 	enterNameText.setString(playerInput);
@@ -94,6 +95,8 @@ void Game::setUpText()
 	
 	score = 0;
 }
+
+
 
 
 Game::~Game()
@@ -216,37 +219,48 @@ void Game::processEvents()
 			}
 		}
 
-		if (event.type == sf::Event::TextEntered)
-		{
-			if (event.text.unicode >= 'a' && event.text.unicode <= 'z' || event.text.unicode >= 'A' && event.text.unicode <= 'Z')
-			{
-				playerInput += event.text.unicode;
-				enterNameText.setString(playerInput);
-			}
-		}
+		UserEnterText(event);
+	}
+}
 
-		if (playerInput != "Enter your name: ")
+void Game::UserEnterText(sf::Event t_event)
+{
+	if (t_event.type == sf::Event::TextEntered)
+	{
+		if (t_event.text.unicode == 8)
 		{
-			if (sf::Event::KeyPressed == event.type) //user key press
+			if (man != "")
 			{
-				if (sf::Keyboard::Enter == event.key.code)
+				man.erase(man.end() - 1);
+				enterNameText.setString(playerInput + " " + man);
+			}
+		}
+		if ((t_event.text.unicode >= 'a' && t_event.text.unicode <= 'z' || t_event.text.unicode >= 'A' && t_event.text.unicode <= 'Z') || t_event.text.unicode == ' ')
+		{
+			man += t_event.text.unicode;
+			enterNameText.setString(playerInput + " " + man);
+		}
+	}
+	if (man != "")
+	{
+		if (sf::Event::KeyPressed == t_event.type) //user key press
+		{
+			if (sf::Keyboard::Enter == t_event.key.code)
+			{
 				{
-					{
-						gameStates = GameScreens::GamePlay;
-					}
-					
+					gameStates = GameScreens::GamePlay;
 				}
 			}
 		}
-		else
+	}
+	else
+	{
+		if (sf::Event::KeyPressed == t_event.type)
 		{
-			if (sf::Event::KeyPressed == event.type)
+			if (sf::Keyboard::Enter == t_event.key.code)
 			{
-				if (sf::Keyboard::Enter == event.key.code)
-				{
-					playerInput = "Enter your name: ";
-					enterNameText.setString(playerInput);
-				}
+				playerInput = "Enter your name: ";
+				enterNameText.setString(playerInput);
 			}
 		}
 	}
