@@ -20,13 +20,13 @@ enum class GameScreens
 class Game
 {
 	std::string playerInput;
-	std::string man;
+	std::string userInput;
 	bool m_gameExit;
 	int score;
 	sf::RenderWindow m_window;
-	int levelData[MAX_ROWS][MAX_COLS];
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
+	Ghost ghost;
 	GameScreens gameStates = GameScreens::EnterName;
 	sf::Font font;
 	sf::Text enterNameText;

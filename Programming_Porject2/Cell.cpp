@@ -66,22 +66,3 @@ void Cell::playerCollision(sf::Sprite t_playerSprite)
 		isAlive = false;
 	}
 }
-
-
-void Cell::draw(sf::RenderWindow &t_window, int t_CellType)
-{
-	if (t_CellType == 0)
-	{
-		t_window.draw(m_sprite);
-	}
-
-	if (t_CellType == 1)
-	{
-		t_window.draw(m_sprite);
-	}
-
-	if (t_CellType == 2)
-	{
-		t_window.draw(m_sprite);
-	}
-}

@@ -1,6 +1,7 @@
-﻿  Game.cpp
+﻿  Ghost.cpp
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\ghost.cpp(24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating code
-  3 of 160 functions ( 1.9%) were compiled, the rest were copied from previous compilation.
+  3 of 163 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

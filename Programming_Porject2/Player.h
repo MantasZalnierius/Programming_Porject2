@@ -24,7 +24,6 @@ class Player
 	bool m_isAlive;
 	int m_row;
 	int m_col;
-	int m_direction;
 	sf::Vector2f m_velocity;
 
 

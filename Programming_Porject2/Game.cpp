@@ -73,8 +73,7 @@ void Game::setUpGame()
 	{
 		for (int col = 0; col < MAX_COLS; col++)
 		{
-			levelData[row][col] = setUpArray[row][col];
-			cellType[row][col].setUpSprites(levelData[row][col], row, col);
+			cellType[row][col].setUpSprites(setUpArray[row][col], row, col);
 		}
 	}
 }
@@ -87,7 +86,7 @@ void Game::setUpText()
 	}
 
 	playerInput = "Enter your name: ";
-	man = "";
+	userInput = "";
 	enterNameText.setFont(font);
 	enterNameText.setCharacterSize(40);
 	enterNameText.setString(playerInput);
@@ -178,11 +177,12 @@ void Game::render()
 			{
 				if (cellType[row][col].getStatus())
 				{
-					cellType[row][col].draw(m_window, levelData[row][col]);
+					m_window.draw(cellType[row][col].getBody());
 				}
 			}
 		}
 		m_window.draw(player.getBody());
+		m_window.draw(ghost.getBody());
 	}
 	
 	if (gameStates == GameScreens::EnterName)
@@ -229,19 +229,19 @@ void Game::UserEnterText(sf::Event t_event)
 	{
 		if (t_event.text.unicode == 8)
 		{
-			if (man != "")
+			if (userInput != "")
 			{
-				man.erase(man.end() - 1);
-				enterNameText.setString(playerInput + " " + man);
+				userInput.erase(userInput.end() - 1);
+				enterNameText.setString(playerInput + " " + userInput);
 			}
 		}
 		if ((t_event.text.unicode >= 'a' && t_event.text.unicode <= 'z' || t_event.text.unicode >= 'A' && t_event.text.unicode <= 'Z') || t_event.text.unicode == ' ')
 		{
-			man += t_event.text.unicode;
-			enterNameText.setString(playerInput + " " + man);
+			userInput += t_event.text.unicode;
+			enterNameText.setString(playerInput + " " + userInput);
 		}
 	}
-	if (man != "")
+	if (userInput != "")
 	{
 		if (sf::Event::KeyPressed == t_event.type) //user key press
 		{

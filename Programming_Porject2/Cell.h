@@ -25,7 +25,6 @@ class Cell
 public:
 	   Cell();
 	  ~Cell();
- void  draw(sf::RenderWindow &t_window, int t_CellType);
  void  setUpSprites(int t_cellType, int t_row, int t_col);
  void  setUpTexture();
  inline sf::Sprite getBody() { return m_sprite; }
