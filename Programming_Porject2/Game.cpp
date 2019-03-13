@@ -138,8 +138,23 @@ void Game::update(sf::Time t_deltaTime)
 	if (gameStates == GameScreens::GamePlay)
 	{
 		std::cout << score;
+
 		player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 		player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
+		ghost.setCol(static_cast<int>(ghost.getBody().getPosition().x) / 32);
+		ghost.setRow(static_cast<int>(ghost.getBody().getPosition().y) / 32);
+
+		if (ghost.getDirection() == GhostDirection::None)
+		{
+			ghost.setDirection();
+		}
+
+		if (ghost.getDirection() != GhostDirection::None)
+		{
+			ghost.move(cellType);
+			ghost.sets(GhostDirection::None);
+		}
+		
 
 		if (player.getDirection() != Direction::None)
 		{
@@ -158,8 +173,6 @@ void Game::update(sf::Time t_deltaTime)
 				}
 			}
 		}
-
-	
 	}
 	
 
@@ -203,7 +216,6 @@ void Game::processEvents()
 			m_window.close(); // This closes the window.
 		}
 		
-		
 		if (sf::Event::KeyPressed == event.type) //user key press
 		{
 			if (sf::Keyboard::Escape == event.key.code) // This checks if the user escaped the game.
@@ -218,7 +230,6 @@ void Game::processEvents()
 				}
 			}
 		}
-
 		UserEnterText(event);
 	}
 }

@@ -1,8 +1,8 @@
 ﻿  Ghost.cpp
-c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\ghost.cpp(24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\ghost.cpp(28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating code
-  3 of 163 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
+  4 of 169 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Programming_Porject2.vcxproj -> C:\Users\C00241626\Desktop\New folder\Programming_Porject2\Release\Programming_Porject2.exe
