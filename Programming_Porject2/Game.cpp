@@ -35,7 +35,7 @@ m_gameExit{ false }
 	// This sets up the game.
 	setUpGame();
 	setUpText();
-
+	cooldown = 0;
 
 }
 
@@ -113,6 +113,18 @@ void Game::run()
 	sf::Clock clock; // This initialize's the Clock object into memory.
 	sf::Time timeSinceLastUpdate = sf::Time::Zero; // This lets the Time object equal to Zero.
 	sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 fps
+	int ghostRows[4]{ 2, 10, 15, 22 };
+	int ghostCols[4]{ 2, 7, 19, 22 };
+
+	for (int i = 0; i < 4; i++)
+	{
+		ghost[i].setPosition(ghostRows[i], ghostCols[i]);
+	}
+
+	ghost[0].setTextureForBlueGhost();
+	ghost[1].setTextureForGreenGhost();
+	ghost[2].setTextureForPurpleGhost();
+	ghost[3].setTextureForRedGhost();
 
 	while (m_window.isOpen())
 	{
@@ -141,19 +153,34 @@ void Game::update(sf::Time t_deltaTime)
 
 		player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 		player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
-		ghost.setCol(static_cast<int>(ghost.getBody().getPosition().x) / 32);
-		ghost.setRow(static_cast<int>(ghost.getBody().getPosition().y) / 32);
 
-		if (ghost.getDirection() == GhostDirection::None)
+		for (int i = 0; i < 4; i++)
 		{
-			ghost.setDirection();
+			ghost[i].setCol(static_cast<int>(ghost[i].getBody().getPosition().x) / 32);
+			ghost[i].setRow(static_cast<int>(ghost[i].getBody().getPosition().y) / 32);
+
+			if (ghost[i].getDirection() == GhostDirection::None)
+			{
+				ghost[i].setDirection();
+			}
+
+			if (ghost[i].getDirection() != GhostDirection::None)
+			{
+				if (ghost[i].getCooldown() <= 0)
+				{
+					ghost[i].move(cellType);
+					ghost[i].sets(GhostDirection::None);
+					ghost[i].setCooldown(10);
+				}
+				else
+				{
+					ghost[i].setCooldown(ghost[i].getCooldown() - 1);
+				}
+			}
 		}
 
-		if (ghost.getDirection() != GhostDirection::None)
-		{
-			ghost.move(cellType);
-			ghost.sets(GhostDirection::None);
-		}
+
+		
 		
 
 		if (player.getDirection() != Direction::None)
@@ -195,7 +222,11 @@ void Game::render()
 			}
 		}
 		m_window.draw(player.getBody());
-		m_window.draw(ghost.getBody());
+		for (int i = 0; i < 4; i++)
+		{
+			m_window.draw(ghost[i].getBody());
+		}
+		
 	}
 	
 	if (gameStates == GameScreens::EnterName)
@@ -222,6 +253,7 @@ void Game::processEvents()
 			{
 				m_gameExit = true;// This sets the bool to true.
 			}
+
 			if (gameStates == GameScreens::GamePlay)
 			{
 				if (player.getDirection() == Direction::None)

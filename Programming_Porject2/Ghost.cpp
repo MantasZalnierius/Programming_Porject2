@@ -3,10 +3,16 @@
 Ghost::Ghost()
 {
 	setUpSprite();
-	randomDirection = 0;
+	randomDirection = rand() % 4 + 1;
 	m_isAlive = true;
 	m_speed = 32;
 	m_velocity = { 0.0, 0.0 };
+	m_direction = GhostDirection::Left;
+	m_row = 0;
+	m_col = 0;
+	cooldown = 0;
+	m_texture;
+	m_sprite;
 }
 
 Ghost::~Ghost()
@@ -16,16 +22,6 @@ Ghost::~Ghost()
 
 void Ghost::setUpSprite()
 {
-	if (!m_texture.loadFromFile("ASSETS/IMAGES/greenghost32.png"))
-	{
-		std::cout << "Error loading texture ";
-	}
-
-	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
-	m_row = 10;
-	m_col = 19;
-	m_sprite.setPosition(m_col * 32, m_row * 32);
 }
 
 void Ghost::move(Cell t_cellType[][MAX_COLS])
@@ -37,7 +33,9 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 		if (t_cellType[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
 		{
 			m_velocity = { -m_speed, 0.0 };
+			m_sprite.setTextureRect(sf::IntRect{ 0, 32, 32, 32 });
 			m_sprite.move(m_velocity);
+			
 		}
 		else
 		{
@@ -50,6 +48,7 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 		if (t_cellType[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
 		{
 			m_velocity = { m_speed, 0.0 };
+			m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
 			m_sprite.move(m_velocity);
 		}
 		else
@@ -63,6 +62,7 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 		if (t_cellType[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
 		{
 			m_velocity = { 0.0f, -m_speed };
+			m_sprite.setTextureRect(sf::IntRect{ 0, 96, 32, 32 });
 			m_sprite.move(m_velocity);
 		}
 		else
@@ -76,6 +76,7 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 		if (t_cellType[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
 		{
 			m_velocity = { 0.0f, m_speed };
+			m_sprite.setTextureRect(sf::IntRect{ 0, 64, 32, 32 });
 			m_sprite.move(m_velocity);
 		}
 		else
@@ -103,4 +104,53 @@ void Ghost::setDirection()
 	{
 		m_direction = GhostDirection::Down;
 	}
+}
+
+void Ghost::setPosition(int row, int col)
+{
+	m_sprite.setPosition(col * 32, row * 32);
+}
+
+void Ghost::setTextureForPurpleGhost()
+{
+	if (!m_texture.loadFromFile("ASSETS/IMAGES/purpleghost32.png"))
+	{
+		std::cout << "Error loading texture ";
+	}
+
+	m_sprite.setTexture(m_texture);
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+}
+
+void Ghost::setTextureForRedGhost()
+{
+	if (!m_texture.loadFromFile("ASSETS/IMAGES/redghost32.png"))
+	{
+		std::cout << "Error loading texture ";
+	}
+
+	m_sprite.setTexture(m_texture);
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+}
+
+void Ghost::setTextureForGreenGhost()
+{
+	if (!m_texture.loadFromFile("ASSETS/IMAGES/greenghost32.png"))
+	{
+		std::cout << "Error loading texture ";
+	}
+
+	m_sprite.setTexture(m_texture);
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+}
+
+void Ghost::setTextureForBlueGhost()
+{
+	if (!m_texture.loadFromFile("ASSETS/IMAGES/blueghost32.png"))
+	{
+		std::cout << "Error loading texture ";
+	}
+
+	m_sprite.setTexture(m_texture);
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
 }

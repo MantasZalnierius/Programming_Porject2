@@ -26,10 +26,12 @@ class Game
 	sf::RenderWindow m_window;
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
-	Ghost ghost;
+	Ghost ghost[4];
 	GameScreens gameStates = GameScreens::EnterName;
 	sf::Font font;
 	sf::Text enterNameText;
+	int cooldown;
+
 
 public:	  // declaration of member functions	
 	Game(); // This is the default constructor for the game class.

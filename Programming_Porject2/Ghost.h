@@ -19,13 +19,14 @@ class Ghost
 {
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
-	GhostDirection m_direction = GhostDirection::Left;
+	GhostDirection m_direction;
 	float m_speed;
 	bool m_isAlive;
 	int m_row;
 	int m_col;
 	int randomDirection;
 	sf::Vector2f m_velocity;
+	int cooldown;
 
 public:
 	Ghost();
@@ -40,6 +41,13 @@ public:
 	inline void setRow(int t_row) { m_row = t_row; }
 	inline void sets(GhostDirection t_playerDirection) { m_direction = t_playerDirection; }
 	inline GhostDirection getDirection() { return m_direction; }
+	void setPosition(int row, int col);
+	inline void setCooldown(int t_cooldown) { cooldown = t_cooldown; }
+	inline int getCooldown() { return cooldown; }
+	void setTextureForPurpleGhost();
+	void setTextureForRedGhost();
+	void setTextureForGreenGhost();
+	void setTextureForBlueGhost();
 
 };
 
