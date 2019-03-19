@@ -87,12 +87,17 @@ void Game::setUpText()
 
 	playerInput = "Enter your name: ";
 	userInput = "";
+
 	enterNameText.setFont(font);
 	enterNameText.setCharacterSize(40);
 	enterNameText.setString(playerInput);
 	enterNameText.setPosition(250.0f, 370.0f);
-	
 	score = 0;
+
+	playerScore.setFont(font);
+	playerScore.setCharacterSize(30);
+	playerScore.setString(userInput + " Score: " + std::to_string(score));
+	playerScore.setPosition(20.0f, 750.0f);
 }
 
 
@@ -149,7 +154,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	if (gameStates == GameScreens::GamePlay)
 	{
-		std::cout << score;
+		playerScore.setString(userInput + " Score: " + std::to_string(score));
 
 		player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 		player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
@@ -178,10 +183,6 @@ void Game::update(sf::Time t_deltaTime)
 				}
 			}
 		}
-
-
-		
-		
 
 		if (player.getDirection() != Direction::None)
 		{
@@ -222,10 +223,13 @@ void Game::render()
 			}
 		}
 		m_window.draw(player.getBody());
+
 		for (int i = 0; i < 4; i++)
 		{
 			m_window.draw(ghost[i].getBody());
 		}
+
+		m_window.draw(playerScore);
 		
 	}
 	

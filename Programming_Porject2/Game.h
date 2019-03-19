@@ -30,6 +30,7 @@ class Game
 	GameScreens gameStates = GameScreens::EnterName;
 	sf::Font font;
 	sf::Text enterNameText;
+	sf::Text playerScore;
 	int cooldown;
 
 
