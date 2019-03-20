@@ -32,7 +32,7 @@ class Game
 	sf::Text enterNameText;
 	sf::Text playerScore;
 	int cooldown;
-
+	int ghostCooldown = 5;
 
 public:	  // declaration of member functions	
 	Game(); // This is the default constructor for the game class.
@@ -46,6 +46,7 @@ public:	  // declaration of member functions
 	void	setUpGame();
 	void	setUpText();
 	void	UserEnterText(sf::Event t_event);
+
 };
 
 

@@ -13,6 +13,7 @@ Ghost::Ghost()
 	cooldown = 0;
 	m_texture;
 	m_sprite;
+	cooldown = 15;
 }
 
 Ghost::~Ghost()
@@ -27,7 +28,7 @@ void Ghost::setUpSprite()
 void Ghost::move(Cell t_cellType[][MAX_COLS])
 {
 	m_velocity = { 0.0, 0.0 };
-	
+
 	if (m_direction == GhostDirection::Left)
 	{
 		if (t_cellType[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
@@ -35,7 +36,6 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 			m_velocity = { -m_speed, 0.0 };
 			m_sprite.setTextureRect(sf::IntRect{ 0, 32, 32, 32 });
 			m_sprite.move(m_velocity);
-			
 		}
 		else
 		{

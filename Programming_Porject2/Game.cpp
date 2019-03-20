@@ -120,7 +120,6 @@ void Game::run()
 	sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 fps
 	int ghostRows[4]{ 2, 10, 15, 22 };
 	int ghostCols[4]{ 2, 7, 19, 22 };
-
 	for (int i = 0; i < 4; i++)
 	{
 		ghost[i].setPosition(ghostRows[i], ghostCols[i]);
@@ -175,13 +174,24 @@ void Game::update(sf::Time t_deltaTime)
 				{
 					ghost[i].move(cellType);
 					ghost[i].sets(GhostDirection::None);
-					ghost[i].setCooldown(10);
+					ghost[i].setCooldown(15);
 				}
 				else
 				{
 					ghost[i].setCooldown(ghost[i].getCooldown() - 1);
 				}
 			}
+
+			if (ghostCooldown <= 0)
+			{
+				ghostCooldown = 5 * 60;
+				ghost[i].setdir(rand() % 4 + 1);
+			}
+			else
+			{
+				ghostCooldown--;
+			}
+
 		}
 
 		if (player.getDirection() != Direction::None)

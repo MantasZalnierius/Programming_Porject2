@@ -48,7 +48,8 @@ public:
 	void setTextureForRedGhost();
 	void setTextureForGreenGhost();
 	void setTextureForBlueGhost();
-
+	inline void setdir(int t_num) { randomDirection = t_num; }
+	inline int getdir() { return randomDirection; }
 };
 
 #endif
