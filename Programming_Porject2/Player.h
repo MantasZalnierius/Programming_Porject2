@@ -25,6 +25,7 @@ class Player
 	int m_row;
 	int m_col;
 	sf::Vector2f m_velocity;
+	int health;
 
 
 
@@ -42,6 +43,9 @@ public:
 	inline Direction getDirection() { return m_playerDirecrtions; }
 	void setDirection(sf::Event t_event);
 	inline void sets(Direction t_playerDirection) { m_playerDirecrtions = t_playerDirection; }
+	inline void resetPosition(int t_col, int t_row) { m_sprite.setPosition(sf::Vector2f{ t_col * 32.0f, t_row * 32.0f }); }
+	inline void setHealth(int t_healthDamage) { health -= t_healthDamage; }
+	inline int getHealth() { return health; }
 };
 
 #endif

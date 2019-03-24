@@ -94,10 +94,15 @@ void Game::setUpText()
 	enterNameText.setPosition(250.0f, 370.0f);
 	score = 0;
 
-	playerScore.setFont(font);
-	playerScore.setCharacterSize(30);
-	playerScore.setString(userInput + " Score: " + std::to_string(score));
-	playerScore.setPosition(20.0f, 750.0f);
+	playerScoreText.setFont(font);
+	playerScoreText.setCharacterSize(30);
+	playerScoreText.setString(userInput + " Score: " + std::to_string(score));
+	playerScoreText.setPosition(20.0f, 750.0f);
+
+	playerHealthText.setFont(font);
+	playerHealthText.setCharacterSize(30);
+	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
+	playerHealthText.setPosition(640.0f, 750.0f);
 }
 
 
@@ -118,8 +123,7 @@ void Game::run()
 	sf::Clock clock; // This initialize's the Clock object into memory.
 	sf::Time timeSinceLastUpdate = sf::Time::Zero; // This lets the Time object equal to Zero.
 	sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 fps
-	int ghostRows[4]{ 2, 10, 15, 22 };
-	int ghostCols[4]{ 2, 7, 19, 22 };
+
 	for (int i = 0; i < 4; i++)
 	{
 		ghost[i].setPosition(ghostRows[i], ghostCols[i]);
@@ -153,7 +157,8 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	if (gameStates == GameScreens::GamePlay)
 	{
-		playerScore.setString(userInput + " Score: " + std::to_string(score));
+		playerScoreText.setString(userInput + " Score: " + std::to_string(score));
+		playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
 
 		player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
 		player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
@@ -212,6 +217,22 @@ void Game::update(sf::Time t_deltaTime)
 			}
 		}
 	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (ghost[i].getCol() == player.getCol() && ghost[i].getRow() == player.getRow())
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				ghost[j].setPosition(ghostRows[j], ghostCols[j]);
+			}
+			player.setCol(static_cast<int>(2));
+			player.setRow(static_cast<int>(22));
+			player.resetPosition(2, 22);
+			player.setHealth(1);
+		}
+	}
+	
 	
 
 }
@@ -239,7 +260,8 @@ void Game::render()
 			m_window.draw(ghost[i].getBody());
 		}
 
-		m_window.draw(playerScore);
+		m_window.draw(playerScoreText);
+		m_window.draw(playerHealthText);
 		
 	}
 	

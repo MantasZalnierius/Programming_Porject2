@@ -22,6 +22,7 @@ void Player::setUpSprite()
 	m_sprite.setPosition(m_col * 32.0f, m_row * 32.0f);
 	m_velocity = { 0.0f, 0.0f };
 	m_speed = 32.0f;
+	health = 3;
 	
 }
 

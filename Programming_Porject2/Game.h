@@ -30,9 +30,13 @@ class Game
 	GameScreens gameStates = GameScreens::EnterName;
 	sf::Font font;
 	sf::Text enterNameText;
-	sf::Text playerScore;
+	sf::Text playerScoreText;
+	sf::Text playerHealthText;
 	int cooldown;
 	int ghostCooldown = 5;
+	int ghostRows[4]{ 2, 10, 15, 22 };
+	int ghostCols[4]{ 2, 7, 19, 22 };
+
 
 public:	  // declaration of member functions	
 	Game(); // This is the default constructor for the game class.
