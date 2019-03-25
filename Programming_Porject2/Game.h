@@ -14,7 +14,7 @@ enum class GameScreens
 {
 	EnterName,
 	MainMenu,
-	GamePlay
+	GamePlay,
 };
 
 class Game

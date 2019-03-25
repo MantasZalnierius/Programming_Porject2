@@ -157,6 +157,15 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	if (gameStates == GameScreens::GamePlay)
 	{
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (ghost[i].getRow() == ghost[i + 1].getRow() && ghost[i].getCol() == ghost[i + 1].getCol())
+			{
+				std::cout << "Hi";
+			}
+		}
+
 		playerScoreText.setString(userInput + " Score: " + std::to_string(score));
 		playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
 
@@ -298,7 +307,12 @@ void Game::processEvents()
 				}
 			}
 		}
-		UserEnterText(event);
+
+		if (gameStates == GameScreens::EnterName)
+		{
+			UserEnterText(event);
+		}
+		
 	}
 }
 
