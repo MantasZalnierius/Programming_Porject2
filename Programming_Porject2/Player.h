@@ -46,6 +46,7 @@ public:
 	inline void resetPosition(int t_col, int t_row) { m_sprite.setPosition(sf::Vector2f{ t_col * 32.0f, t_row * 32.0f }); }
 	inline void setHealth(int t_healthDamage) { health -= t_healthDamage; }
 	inline int getHealth() { return health; }
+	void setUpPlayerForHelpScreen();
 };
 
 #endif

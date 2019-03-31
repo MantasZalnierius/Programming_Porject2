@@ -25,7 +25,7 @@ void Ghost::setUpSprite()
 {
 }
 
-void Ghost::move(Cell t_cellType[][MAX_COLS])
+void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 {
 	m_velocity = { 0.0, 0.0 };
 
@@ -33,9 +33,20 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 	{
 		if (t_cellType[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { -m_speed, 0.0 };
-			m_sprite.setTextureRect(sf::IntRect{ 0, 32, 32, 32 });
-			m_sprite.move(m_velocity);
+			if (m_row == t_rows && m_col + 1 == t_cols)
+			{
+				randomDirection = (rand() % 4) + 1;
+				m_velocity = { -m_speed, 0.0 };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 32, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
+			else
+			{
+				m_velocity = { -m_speed, 0.0 };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 32, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
+			
 		}
 		else
 		{
@@ -47,9 +58,19 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 	{
 		if (t_cellType[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { m_speed, 0.0 };
-			m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
-			m_sprite.move(m_velocity);
+			if (m_row == t_rows && m_col - 1 == t_cols)
+			{
+				randomDirection = (rand() % 4) + 1;
+				m_velocity = { m_speed, 0.0 };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
+			else
+			{
+				m_velocity = { m_speed, 0.0 };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
 		}
 		else
 		{
@@ -61,9 +82,20 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 	{
 		if (t_cellType[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { 0.0f, -m_speed };
-			m_sprite.setTextureRect(sf::IntRect{ 0, 96, 32, 32 });
-			m_sprite.move(m_velocity);
+			if (m_row + 1 == t_rows && m_col == t_cols)
+			{
+				randomDirection = (rand() % 4) + 1;
+				m_velocity = { 0.0f, -m_speed };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 96, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
+			else
+			{
+				m_velocity = { 0.0f, -m_speed };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 96, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
+			
 		}
 		else
 		{
@@ -75,9 +107,19 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 	{
 		if (t_cellType[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
 		{
-			m_velocity = { 0.0f, m_speed };
-			m_sprite.setTextureRect(sf::IntRect{ 0, 64, 32, 32 });
-			m_sprite.move(m_velocity);
+			if (m_row - 1 == t_rows && m_col == t_cols)
+			{
+				randomDirection = (rand() % 4) + 1;
+				m_velocity = { 0.0f, m_speed };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 64, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
+			else
+			{
+				m_velocity = { 0.0f, m_speed };
+				m_sprite.setTextureRect(sf::IntRect{ 0, 64, 32, 32 });
+				m_sprite.move(m_velocity);
+			}
 		}
 		else
 		{
@@ -153,4 +195,9 @@ void Ghost::setTextureForBlueGhost()
 
 	m_sprite.setTexture(m_texture);
 	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+}
+
+void Ghost::setUpPositionForGhostForHelpScreen()
+{
+	m_sprite.setPosition(50, 100);
 }

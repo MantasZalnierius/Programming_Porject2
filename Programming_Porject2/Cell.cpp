@@ -66,3 +66,9 @@ void Cell::playerCollision(sf::Sprite t_playerSprite)
 		isAlive = false;
 	}
 }
+
+void Cell::setUpPelletForHelpScreen()
+{
+	m_sprite.setTexture(m_pelletTexture);
+	m_sprite.setPosition(50, 350);
+}

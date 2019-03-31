@@ -1,4 +1,3 @@
-
 #ifdef _DEBUG 
 #pragma comment(lib,"sfml-graphics-d.lib") 
 #pragma comment(lib,"sfml-audio-d.lib") 
@@ -34,7 +33,6 @@ m_gameExit{ false }
 {
 	// This sets up the game.
 	setUpGame();
-	setUpText();
 	cooldown = 0;
 
 }
@@ -69,6 +67,8 @@ void Game::setUpGame()
 	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
 	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 } };
 
+	score = 0;
+
 	for (int row = 0; row < MAX_ROWS; row++)
 	{
 		for (int col = 0; col < MAX_COLS; col++)
@@ -78,7 +78,7 @@ void Game::setUpGame()
 	}
 }
 
-void Game::setUpText()
+void Game::loadContent()
 {
 	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
 	{
@@ -88,32 +88,29 @@ void Game::setUpText()
 	playerInput = "Enter your name: ";
 	userInput = "";
 
-	enterNameText.setFont(font);
-	enterNameText.setCharacterSize(40);
-	enterNameText.setString(playerInput);
-	enterNameText.setPosition(250.0f, 370.0f);
-	score = 0;
-
-	playerScoreText.setFont(font);
-	playerScoreText.setCharacterSize(30);
-	playerScoreText.setString(userInput + " Score: " + std::to_string(score));
-	playerScoreText.setPosition(20.0f, 750.0f);
-
-	playerHealthText.setFont(font);
-	playerHealthText.setCharacterSize(30);
-	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
-	playerHealthText.setPosition(640.0f, 750.0f);
+	SetupText(enterNameText, sf::Vector2f(250.0f, 370.0f), playerInput);
+	SetupText(playerScoreText, sf::Vector2f(20.0f, 750.0f), (userInput + " Score: " + std::to_string(score)));
+	SetupText(playerHealthText, sf::Vector2f(640.0f, 750.0f), (userInput + " Health: " + std::to_string(player.getHealth())));
+	SetupText(MainMenuText, sf::Vector2f(350.0f, 300.0f), "(1) New Game \n\n (2) Controls \n\n (3) Exit ");
+	SetupText(helpGhostText, sf::Vector2f(100.0f, 100.0f), "These are ghosts, they are your eneimes. \n Stay away from them and you'll be fine \n they will navigate through the level looking for you.");
+	SetupText(helpPacmanText, sf::Vector2f(100.0f, 600.0f), "You are Pacman \n your goal is to get every single pellet before the ghosts kill you. \n When a ghost collides with you, you lose 1 live. \n You only have three lives in the game.");
+	SetupText(helpPelletText, sf::Vector2f(100.0f, 350.0f), "These are pellets \n when you eat one of these pellets you will get 2 two points.\n Your goal is to get all of these pellets. ");
+	SetupText(returnToMainMenuText, sf::Vector2f(230.0f, 750.0f), "Press 4 to go back to the main menu ");
+	SetupText(youLostText, sf::Vector2f(300.0f, 350.0f), "You Lost The Game ");
+	SetupText(youWonText, sf::Vector2f(300.0f, 350.0f), "You Lost The Game ");
 }
 
-
+void Game::SetupText(sf::Text &t_text, sf::Vector2f t_position, std::string t_sentence)
+{
+	t_text.setFont(font);  // set the font for the text
+	t_text.setCharacterSize(30); // set the text size
+	t_text.setFillColor(sf::Color::White); // set the text colour
+	t_text.setPosition(t_position);  // its position on the screen
+	t_text.setString(t_sentence); // This sets the string to the text.
+}
 
 
 Game::~Game()
-{
-}
-
-
-void Game::loadContent()
 {
 }
 
@@ -133,6 +130,12 @@ void Game::run()
 	ghost[1].setTextureForGreenGhost();
 	ghost[2].setTextureForPurpleGhost();
 	ghost[3].setTextureForRedGhost();
+
+
+	helpGhost.setTextureForBlueGhost();
+	helpGhost.setUpPositionForGhostForHelpScreen();
+	helpPellet.setUpPelletForHelpScreen();
+	helpPlayer.setUpPlayerForHelpScreen();
 
 	while (m_window.isOpen())
 	{
@@ -155,75 +158,94 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close(); // This closes the window.
 	}
+	updateMainMenuScreen();
+	updateHelpScreen();
+	updateGamePlayScreen();
+	updateYouLoseScreen();
+	updateYouWinScreen();
+	
+}
+
+void Game::updateGamePlayScreen()
+{
 	if (gameStates == GameScreens::GamePlay)
 	{
+		updatePlayer();
+		updateGhosts();
+	}
+}
 
-		for (int i = 0; i < 4; i++)
+void Game::updatePlayer()
+{
+	if (player.getHealth() <= 0)
+	{
+		gameStates = GameScreens::YouLost;
+	}
+
+	if (score >= 356)
+	{
+		gameStates = GameScreens::YouWon;
+	}
+	playerScoreText.setString(userInput + " Score: " + std::to_string(score));
+	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
+
+	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
+	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
+
+	if (player.getDirection() != Direction::None)
+	{
+		player.move(cellType);
+		player.sets(Direction::None);
+	}
+
+	for (int row = 0; row < MAX_ROWS; row++)
+	{
+		for (int col = 0; col < MAX_COLS; col++)
 		{
-			if (ghost[i].getRow() == ghost[i + 1].getRow() && ghost[i].getCol() == ghost[i + 1].getCol())
+			if (cellType[row][col].getStatus() && cellType[row][col].getCell() == TypeOfCell::Pellet)
 			{
-				std::cout << "Hi";
+				cellType[row][col].playerCollision(player.getBody());
+				player.pelletCollision(cellType[row][col].getBody(), score);
 			}
 		}
+	}
+}
 
-		playerScoreText.setString(userInput + " Score: " + std::to_string(score));
-		playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
+void Game::updateGhosts()
+{
 
-		player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
-		player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
+	for (int i = 0; i < 4; i++)
+	{
+		ghost[i].setCol(static_cast<int>(ghost[i].getBody().getPosition().x) / 32);
+		ghost[i].setRow(static_cast<int>(ghost[i].getBody().getPosition().y) / 32);
 
-		for (int i = 0; i < 4; i++)
+		if (ghost[i].getDirection() == GhostDirection::None)
 		{
-			ghost[i].setCol(static_cast<int>(ghost[i].getBody().getPosition().x) / 32);
-			ghost[i].setRow(static_cast<int>(ghost[i].getBody().getPosition().y) / 32);
+			ghost[i].setDirection();
+		}
 
-			if (ghost[i].getDirection() == GhostDirection::None)
+		if (ghost[i].getDirection() != GhostDirection::None)
+		{
+			if (ghost[i].getCooldown() <= 0)
 			{
-				ghost[i].setDirection();
-			}
-
-			if (ghost[i].getDirection() != GhostDirection::None)
-			{
-				if (ghost[i].getCooldown() <= 0)
-				{
-					ghost[i].move(cellType);
-					ghost[i].sets(GhostDirection::None);
-					ghost[i].setCooldown(15);
-				}
-				else
-				{
-					ghost[i].setCooldown(ghost[i].getCooldown() - 1);
-				}
-			}
-
-			if (ghostCooldown <= 0)
-			{
-				ghostCooldown = 5 * 60;
-				ghost[i].setdir(rand() % 4 + 1);
+				ghost[i].move(cellType, ghost[i + 1].getRow(), (ghost[i + 1].getCol()));
+				ghost[i].sets(GhostDirection::None);
+				ghost[i].setCooldown(15);
 			}
 			else
 			{
-				ghostCooldown--;
+				ghost[i].setCooldown(ghost[i].getCooldown() - 1);
 			}
-
 		}
 
-		if (player.getDirection() != Direction::None)
+		if (ghostCooldown <= 0)
 		{
-			player.move(cellType);
-			player.sets(Direction::None);
+			ghostCooldown = 5 * 60;
+			ghost[i].setdir(rand() % 4 + 1);
 		}
-
-		for (int row = 0; row < MAX_ROWS; row++)
+		else
 		{
-			for (int col = 0; col < MAX_COLS; col++)
-			{
-				if (cellType[row][col].getStatus() && cellType[row][col].getCell() == TypeOfCell::Pellet)
-				{
-					cellType[row][col].playerCollision(player.getBody());
-					player.pelletCollision(cellType[row][col].getBody(), score);
-				}
-			}
+			ghostCooldown--;
 		}
 	}
 
@@ -241,46 +263,161 @@ void Game::update(sf::Time t_deltaTime)
 			player.setHealth(1);
 		}
 	}
-	
-	
+}
 
+void Game::updateMainMenuScreen()
+{
+	if (gameStates == GameScreens::MainMenu)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+		{
+			gameStates = GameScreens::EnterName;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		{
+			gameStates = GameScreens::Help;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		{
+			m_gameExit = true;
+		}
+	}
+}
+
+void Game::updateHelpScreen()
+{
+	if (gameStates == GameScreens::Help)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		{
+			gameStates = GameScreens::MainMenu;
+		}
+	}
+}
+
+void Game::updateYouLoseScreen()
+{
+	if (gameStates == GameScreens::YouLost)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		{
+			player.setUpSprite();
+			setUpGame();
+			loadContent();
+			for (int i = 0; i < 4; i++)
+			{
+				ghost[i].setUpSprite();
+				ghost[i].setPosition(ghostRows[i], ghostCols[i]);
+			}
+			gameStates = GameScreens::MainMenu;
+		}
+	}
+}
+
+void Game::updateYouWinScreen()
+{
+	if (gameStates == GameScreens::YouWon)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		{
+			player.setUpSprite();
+			setUpGame();
+			loadContent();
+			for (int i = 0; i < 4; i++)
+			{
+				ghost[i].setUpSprite();
+				ghost[i].setPosition(ghostRows[i], ghostCols[i]);
+			}
+			gameStates = GameScreens::MainMenu;
+		}
+	}
 }
 
 
 void Game::render()
 {
 	m_window.clear(); // This clears all the screen.
+
 	if (gameStates == GameScreens::GamePlay)
 	{
-		for (int row = 0; row < MAX_ROWS; row++)
-		{
-			for (int col = 0; col < MAX_COLS; col++)
-			{
-				if (cellType[row][col].getStatus())
-				{
-					m_window.draw(cellType[row][col].getBody());
-				}
-			}
-		}
-		m_window.draw(player.getBody());
-
-		for (int i = 0; i < 4; i++)
-		{
-			m_window.draw(ghost[i].getBody());
-		}
-
-		m_window.draw(playerScoreText);
-		m_window.draw(playerHealthText);
-		
+		drawGameplayScreen();
 	}
 	
 	if (gameStates == GameScreens::EnterName)
 	{
 		m_window.draw(enterNameText);
 	}
+
+	if (gameStates == GameScreens::MainMenu)
+	{
+		m_window.draw(MainMenuText);
+	}
+
+	if (gameStates == GameScreens::Help)
+	{
+		drawHelpScreen();
+	}
+
+	if (gameStates == GameScreens::YouLost)
+	{
+		drawYouLoseScreen();
+	}
+
+	if (gameStates == GameScreens::YouWon)
+	{
+		drawYouWinScreen();
+	}
+
 	m_window.display(); // This displays everything.
 }
 
+void Game::drawHelpScreen()
+{
+	m_window.draw(helpGhostText);
+	m_window.draw(helpPacmanText);
+	m_window.draw(helpPelletText);
+	m_window.draw(helpGhost.getBody());
+	m_window.draw(helpPellet.getBody());
+	m_window.draw(helpPlayer.getBody());
+	m_window.draw(returnToMainMenuText);
+}
+
+void Game::drawGameplayScreen()
+{
+	for (int row = 0; row < MAX_ROWS; row++)
+	{
+		for (int col = 0; col < MAX_COLS; col++)
+		{
+			if (cellType[row][col].getStatus())
+			{
+				m_window.draw(cellType[row][col].getBody());
+			}
+		}
+	}
+	m_window.draw(player.getBody());
+
+	for (int i = 0; i < 4; i++)
+	{
+		m_window.draw(ghost[i].getBody());
+	}
+
+	m_window.draw(playerScoreText);
+	m_window.draw(playerHealthText);
+}
+
+void Game::drawYouWinScreen()
+{
+	m_window.draw(youWonText);
+	m_window.draw(playerScoreText);
+	m_window.draw(returnToMainMenuText);
+}
+
+void Game::drawYouLoseScreen()
+{
+	m_window.draw(youLostText);
+	m_window.draw(playerScoreText);
+	m_window.draw(returnToMainMenuText);
+}
 
 void Game::processEvents()
 {
@@ -312,7 +449,6 @@ void Game::processEvents()
 		{
 			UserEnterText(event);
 		}
-		
 	}
 }
 
@@ -340,9 +476,7 @@ void Game::UserEnterText(sf::Event t_event)
 		{
 			if (sf::Keyboard::Enter == t_event.key.code)
 			{
-				{
-					gameStates = GameScreens::GamePlay;
-				}
+				gameStates = GameScreens::GamePlay;
 			}
 		}
 	}

@@ -31,6 +31,7 @@ public:
  inline TypeOfCell getCell() { return typeOfCell; }
  inline bool getStatus() { return isAlive; }
  void playerCollision(sf::Sprite t_playerSprite);
+ void setUpPelletForHelpScreen();
 
 };
 

@@ -99,3 +99,9 @@ void Player::setDirection(sf::Event t_event)
 		m_sprite.setTextureRect(sf::IntRect{ 0, 140, 32, 32 });
 	}
 }
+
+void Player::setUpPlayerForHelpScreen()
+{
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(50, 600);
+}

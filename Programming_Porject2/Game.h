@@ -15,6 +15,9 @@ enum class GameScreens
 	EnterName,
 	MainMenu,
 	GamePlay,
+	Help,
+	YouLost,
+	YouWon,
 };
 
 class Game
@@ -27,15 +30,27 @@ class Game
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
 	Ghost ghost[4];
-	GameScreens gameStates = GameScreens::EnterName;
+	Ghost helpGhost;
+	Player helpPlayer;
+	Cell  helpPellet;
+	GameScreens gameStates = GameScreens::MainMenu;
 	sf::Font font;
 	sf::Text enterNameText;
 	sf::Text playerScoreText;
 	sf::Text playerHealthText;
+	sf::Text MainMenuText;
+	sf::Text helpPacmanText;
+	sf::Text helpGhostText;
+	sf::Text helpPelletText;
+	sf::Text returnToMainMenuText;
+	sf::Text youLostText;
+	sf::Text youWonText;
 	int cooldown;
 	int ghostCooldown = 5;
-	int ghostRows[4]{ 2, 10, 15, 22 };
-	int ghostCols[4]{ 2, 7, 19, 22 };
+	int ghostRows[4]{ 2, 2, 2, 2 };
+	int ghostCols[4]{ 2, 3, 4, 5 };
+	//int ghostRows[4]{ 2, 10, 15, 22 };
+	//int ghostCols[4]{ 2, 7, 19, 22 };
 
 
 public:	  // declaration of member functions	
@@ -48,8 +63,20 @@ public:	  // declaration of member functions
 	void	render(); // This member function renders the game.
 	void	processEvents(); // This member function process user created events.
 	void	setUpGame();
-	void	setUpText();
+	void	SetupText(sf::Text &t_text, sf::Vector2f t_position, std::string t_sentence);
 	void	UserEnterText(sf::Event t_event);
+	void	updateGamePlayScreen();
+	void	updateMainMenuScreen();
+	void    updateHelpScreen();
+	void    updateYouLoseScreen();
+	void    updateYouWinScreen();
+	void	updatePlayer();
+	void	updateGhosts();
+	void	drawMainMenuScreen();
+	void	drawHelpScreen();
+	void	drawGameplayScreen();
+	void	drawYouWinScreen();
+	void	drawYouLoseScreen();
 
 };
 

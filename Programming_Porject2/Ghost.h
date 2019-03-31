@@ -32,7 +32,7 @@ public:
 	Ghost();
 	~Ghost();
 	void setUpSprite();
-	void move(Cell t_cellType[][MAX_COLS]);
+	void move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols);
 	void setDirection();
 	inline sf::Sprite getBody() { return m_sprite; }
 	inline int getRow() { return m_row; }
@@ -50,6 +50,7 @@ public:
 	void setTextureForBlueGhost();
 	inline void setdir(int t_num) { randomDirection = t_num; }
 	inline int getdir() { return randomDirection; }
+	void setUpPositionForGhostForHelpScreen();
 };
 
 #endif
