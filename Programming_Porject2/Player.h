@@ -28,6 +28,7 @@ class Player
 	int m_col;
 	sf::Vector2f m_velocity;
 	int health;
+	std::ofstream inputFile;
 
 
 
@@ -50,6 +51,7 @@ public:
 	inline int getHealth() { return health; }
 	void setUpPlayerForHelpScreen();
 	void saveDataToFile(std::ofstream &t_outputFile);
+	void collisions();
 };
 
 #endif

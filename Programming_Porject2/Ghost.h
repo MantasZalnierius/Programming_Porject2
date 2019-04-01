@@ -30,6 +30,8 @@ class Ghost
 	int randomDirection;
 	sf::Vector2f m_velocity;
 	int cooldown;
+	int ghostCooldown;
+	std::ofstream inputFile;
 
 public:
 	Ghost();

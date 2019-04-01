@@ -37,37 +37,42 @@ m_gameExit{ false }
 
 }
 
-
 void Game::setUpGame()
 {
-	int setUpArray[MAX_ROWS][MAX_COLS] = {
-	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,1,1 },
-	{ 1,1,2,1,1,2,1,1,1,1,1,1,2,2,1,1,1,1,1,2,1,1,2,1,1 },
-	{ 1,1,2,1,1,2,1,2,2,2,2,2,2,2,2,2,2,2,1,2,1,1,2,1,1 },
-	{ 1,1,2,2,2,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,2,2,2,1,1 },
-	{ 1,1,2,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,1,2,1,1 },
-	{ 1,1,2,1,1,2,1,2,2,2,2,2,2,2,2,2,2,2,1,2,1,1,2,1,1 },
-	{ 1,1,2,1,1,2,1,1,1,1,1,1,2,2,1,1,1,1,1,2,1,1,2,1,1 },
-	{ 1,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1 },
-	{ 1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 } };
 
+	int setUpArray[MAX_ROWS][MAX_COLS]{};
+	int i = 0;
+	int j = 0;
+	std::ifstream inputFile;
 
+	inputFile.open("LevelData.txt");
+
+	if (!inputFile)
+		std::cout << "Error opening file!" << std::endl;
+	else
+	{
+		// determines number of items in input file.
+		int item = 0;
+		while (!inputFile.eof())
+		{
+			if (j >= MAX_COLS)
+			{
+				j = 0;
+				i++;
+			}
+
+			inputFile >> item;
+
+			
+			setUpArray[i][j] = item;
+			j++;
+		}
+
+		// write data into 2D array
+		
+
+		inputFile.close();
+	}
 	score = 0;
 
 	for (int row = 0; row < MAX_ROWS; row++)
@@ -165,21 +170,6 @@ void Game::update(sf::Time t_deltaTime)
 	updateYouLoseScreen();
 	updateYouWinScreen();
 	std::ofstream outputFile;
-
-	outputFile.open("PacmanData.txt");
-
-	if (outputFile.is_open())
-	{
-		player.saveDataToFile(outputFile);
-		outputFile << std::endl;
-
-		outputFile.close();
-	}
-	else
-	{
-		std::cout << "Error - unable to open the txt file. \n";
-	}
-	
 }
 
 void Game::updateGamePlayScreen()
@@ -202,17 +192,11 @@ void Game::updatePlayer()
 	{
 		gameStates = GameScreens::YouWon;
 	}
+
 	playerScoreText.setString(userInput + " Score: " + std::to_string(score));
 	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
 
-	player.setCol(static_cast<int>(player.getBody().getPosition().x) / 32);
-	player.setRow(static_cast<int>(player.getBody().getPosition().y) / 32);
-
-	if (player.getDirection() != Direction::None)
-	{
-		player.move(cellType);
-		player.sets(Direction::None);
-	}
+	player.move(cellType);
 
 	for (int row = 0; row < MAX_ROWS; row++)
 	{
@@ -232,37 +216,7 @@ void Game::updateGhosts()
 
 	for (int i = 0; i < 4; i++)
 	{
-		ghost[i].setCol(static_cast<int>(ghost[i].getBody().getPosition().x) / 32);
-		ghost[i].setRow(static_cast<int>(ghost[i].getBody().getPosition().y) / 32);
-
-		if (ghost[i].getDirection() == GhostDirection::None)
-		{
-			ghost[i].setDirection();
-		}
-
-		if (ghost[i].getDirection() != GhostDirection::None)
-		{
-			if (ghost[i].getCooldown() <= 0)
-			{
-				ghost[i].move(cellType, ghost[i + 1].getRow(), (ghost[i + 1].getCol()));
-				ghost[i].sets(GhostDirection::None);
-				ghost[i].setCooldown(15);
-			}
-			else
-			{
-				ghost[i].setCooldown(ghost[i].getCooldown() - 1);
-			}
-		}
-
-		if (ghostCooldown <= 0)
-		{
-			ghostCooldown = 5 * 60;
-			ghost[i].setdir(rand() % 4 + 1);
-		}
-		else
-		{
-			ghostCooldown--;
-		}
+		ghost[i].move(cellType, ghost[i + 1].getRow(), (ghost[i + 1].getCol()));
 	}
 
 	for (int i = 0; i < 4; i++)
@@ -273,10 +227,7 @@ void Game::updateGhosts()
 			{
 				ghost[j].setPosition(ghostRows[j], ghostCols[j]);
 			}
-			player.setCol(static_cast<int>(2));
-			player.setRow(static_cast<int>(22));
-			player.resetPosition(2, 22);
-			player.setHealth(1);
+			player.collisions();
 		}
 	}
 }

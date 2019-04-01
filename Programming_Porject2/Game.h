@@ -49,7 +49,6 @@ class Game
 	sf::Text youLostText;
 	sf::Text youWonText;
 	int cooldown;
-	int ghostCooldown = 5;
 	int ghostRows[4]{ 2, 2, 2, 2 };
 	int ghostCols[4]{ 2, 3, 4, 5 };
 	//int ghostRows[4]{ 2, 10, 15, 22 };

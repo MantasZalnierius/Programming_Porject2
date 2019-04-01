@@ -36,41 +36,65 @@ void Player::pelletCollision(sf::Sprite t_pellet, int &t_score)
 
 void Player::move(Cell t_typeOfCell[][MAX_COLS])
 {
-	m_velocity = { 0.0, 0.0 };
+	inputFile.open("PacmanData.txt");
 
-	if (m_playerDirecrtions == Direction::Left)
+	if (inputFile.is_open())
 	{
-		if (t_typeOfCell[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
-		{
-			m_velocity = { -m_speed, 0.0 };
-		}
+		saveDataToFile(inputFile);
+		inputFile << std::endl;
+
+		inputFile.close();
+	}
+	else
+	{
+		std::cout << "Error - unable to open the txt file. \n";
 	}
 
-	else if (m_playerDirecrtions == Direction::Right)
-	{
-		if (t_typeOfCell[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
-		{
-			m_velocity = { m_speed, 0.0 };
-		}
-	}
+	m_col = (static_cast<int>(m_sprite.getPosition().x / 32));
+	m_row = (static_cast<int>(m_sprite.getPosition().y / 32));
 
-	else if (m_playerDirecrtions == Direction::Up)
+	
+	if (m_playerDirecrtions != Direction::None)
 	{
-		if (t_typeOfCell[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
-		{
-			m_velocity = { 0.0f, -m_speed };
-		}
-	}
+		m_velocity = { 0.0, 0.0 };
 
-	else if (m_playerDirecrtions == Direction::Down)
-	{
-		if (t_typeOfCell[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
+		if (m_playerDirecrtions == Direction::Left)
 		{
-			m_velocity = { 0.0f, m_speed };
+			if (t_typeOfCell[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
+			{
+				m_velocity = { -m_speed, 0.0 };
+			}
 		}
-	}
 
-	m_sprite.move(m_velocity);
+		else if (m_playerDirecrtions == Direction::Right)
+		{
+			if (t_typeOfCell[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
+			{
+				m_velocity = { m_speed, 0.0 };
+			}
+		}
+
+		else if (m_playerDirecrtions == Direction::Up)
+		{
+			if (t_typeOfCell[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
+			{
+				m_velocity = { 0.0f, -m_speed };
+			}
+		}
+
+		else if (m_playerDirecrtions == Direction::Down)
+		{
+			if (t_typeOfCell[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
+			{
+				m_velocity = { 0.0f, m_speed };
+			}
+		}
+
+		m_sprite.move(m_velocity);
+
+		m_playerDirecrtions = Direction::None;
+	}
+	
 }
 
 void Player::setDirection(sf::Event t_event)
@@ -108,11 +132,19 @@ void Player::setUpPlayerForHelpScreen()
 
 void Player::saveDataToFile(std::ofstream & t_outputFile)
 {
-	t_outputFile << m_sprite.getPosition().x << ",";
+	t_outputFile << m_sprite.getPosition().x << " Pacman's X position,";
 	t_outputFile << std::endl;
-	t_outputFile << m_sprite.getPosition().y << ",";
+	t_outputFile << m_sprite.getPosition().y << " Pacman's Y position,";
 	t_outputFile << std::endl;
-	t_outputFile << health << ",";
+	t_outputFile << m_isAlive << " Pacman's current health,";
 	t_outputFile << std::endl;
-	t_outputFile << m_speed << ",";
+	t_outputFile << m_speed << " Pacman's current movement speed,";
+}
+
+void Player::collisions()
+{
+	m_col = (static_cast<int>(2));
+	m_row = (static_cast<int>(22));
+	resetPosition(2, 22);
+	health--;
 }
