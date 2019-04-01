@@ -159,3 +159,7 @@ void Ghost::setUpPositionForGhostForHelpScreen()
 {
 	m_sprite.setPosition(50, 100);
 }
+
+void Ghost::saveDataToFile(std::ofstream & t_outputFile)
+{
+}

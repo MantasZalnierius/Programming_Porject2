@@ -5,6 +5,9 @@
 #include <iostream>
 #include "Globals.h"
 #include "Cell.h"
+#include <iostream>
+#include <fstream>
+
 
 enum class GhostDirection
 {
@@ -51,6 +54,7 @@ public:
 	inline void setdir(int t_num) { randomDirection = t_num; }
 	inline int getdir() { return randomDirection; }
 	void setUpPositionForGhostForHelpScreen();
+	void saveDataToFile(std::ofstream &t_outputFile);
 };
 
 #endif

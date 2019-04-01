@@ -67,6 +67,7 @@ void Game::setUpGame()
 	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
 	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 } };
 
+
 	score = 0;
 
 	for (int row = 0; row < MAX_ROWS; row++)
@@ -163,6 +164,21 @@ void Game::update(sf::Time t_deltaTime)
 	updateGamePlayScreen();
 	updateYouLoseScreen();
 	updateYouWinScreen();
+	std::ofstream outputFile;
+
+	outputFile.open("PacmanData.txt");
+
+	if (outputFile.is_open())
+	{
+		player.saveDataToFile(outputFile);
+		outputFile << std::endl;
+
+		outputFile.close();
+	}
+	else
+	{
+		std::cout << "Error - unable to open the txt file. \n";
+	}
 	
 }
 

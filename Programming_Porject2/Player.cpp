@@ -105,3 +105,14 @@ void Player::setUpPlayerForHelpScreen()
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(50, 600);
 }
+
+void Player::saveDataToFile(std::ofstream & t_outputFile)
+{
+	t_outputFile << m_sprite.getPosition().x << ",";
+	t_outputFile << std::endl;
+	t_outputFile << m_sprite.getPosition().y << ",";
+	t_outputFile << std::endl;
+	t_outputFile << health << ",";
+	t_outputFile << std::endl;
+	t_outputFile << m_speed << ",";
+}

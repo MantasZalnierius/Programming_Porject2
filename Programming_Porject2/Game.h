@@ -9,6 +9,9 @@
 #include "Player.h"
 #include "Cell.h"
 #include "PowerUp.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 enum class GameScreens
 {
@@ -52,6 +55,8 @@ class Game
 	//int ghostRows[4]{ 2, 10, 15, 22 };
 	//int ghostCols[4]{ 2, 7, 19, 22 };
 
+//	std::ofs
+
 
 public:	  // declaration of member functions	
 	Game(); // This is the default constructor for the game class.
@@ -72,7 +77,6 @@ public:	  // declaration of member functions
 	void    updateYouWinScreen();
 	void	updatePlayer();
 	void	updateGhosts();
-	void	drawMainMenuScreen();
 	void	drawHelpScreen();
 	void	drawGameplayScreen();
 	void	drawYouWinScreen();

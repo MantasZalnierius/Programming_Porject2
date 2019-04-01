@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Globals.h"
 #include "Cell.h"
+#include <iostream>
+#include <fstream>
 
 enum class  Direction
 {
@@ -47,6 +49,7 @@ public:
 	inline void setHealth(int t_healthDamage) { health -= t_healthDamage; }
 	inline int getHealth() { return health; }
 	void setUpPlayerForHelpScreen();
+	void saveDataToFile(std::ofstream &t_outputFile);
 };
 
 #endif
