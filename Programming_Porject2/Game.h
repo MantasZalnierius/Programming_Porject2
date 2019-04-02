@@ -48,6 +48,7 @@ class Game
 	sf::Text returnToMainMenuText;
 	sf::Text youLostText;
 	sf::Text youWonText;
+	std::ofstream inputFile;
 	int cooldown;
 	int ghostRows[4]{ 2, 2, 2, 2 };
 	int ghostCols[4]{ 2, 3, 4, 5 };

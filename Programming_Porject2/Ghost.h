@@ -31,7 +31,6 @@ class Ghost
 	sf::Vector2f m_velocity;
 	int cooldown;
 	int ghostCooldown;
-	std::ofstream inputFile;
 
 public:
 	Ghost();

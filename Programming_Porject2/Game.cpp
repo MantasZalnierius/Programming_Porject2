@@ -41,38 +41,48 @@ void Game::setUpGame()
 {
 
 	int setUpArray[MAX_ROWS][MAX_COLS]{};
-	int i = 0;
-	int j = 0;
-	std::ifstream inputFile;
 
-	inputFile.open("LevelData.txt");
+	std::string line;
+	std::string item;
+	int i, j;
+	bool dataOK = true;
+	std::ifstream myfile("LevelData.txt");
 
-	if (!inputFile)
-		std::cout << "Error opening file!" << std::endl;
+	if (myfile.is_open())
+	{
+
+			i = 0;
+			while (std::getline(myfile, line) && dataOK)
+			{
+				std::stringstream line_ss(line);
+				j = 0;
+				while (std::getline(line_ss, item, ',') && dataOK)
+				{
+					std::cout << item << '\n';
+					if (item == "1")
+						setUpArray[i][j] = 1;
+					if (item == "2")
+						setUpArray[i][j] = 2;
+					j++;
+					if (j > MAX_COLS)
+					{
+						std::cout << "too many cols" << "\n";
+						dataOK = false;
+					}
+				}
+				i++;
+				if (i > MAX_ROWS)
+				{
+					std::cout << "too many rows" << "\n";
+					dataOK = false;
+				}
+			}
+	}
 	else
 	{
-		// determines number of items in input file.
-		int item = 0;
-		while (!inputFile.eof())
-		{
-			if (j >= MAX_COLS)
-			{
-				j = 0;
-				i++;
-			}
-
-			inputFile >> item;
-
-			
-			setUpArray[i][j] = item;
-			j++;
-		}
-
-		// write data into 2D array
-		
-
-		inputFile.close();
+		std::cout << "can't open the level file" << "\n";
 	}
+
 	score = 0;
 
 	for (int row = 0; row < MAX_ROWS; row++)
@@ -217,7 +227,21 @@ void Game::updateGhosts()
 	for (int i = 0; i < 4; i++)
 	{
 		ghost[i].move(cellType, ghost[i + 1].getRow(), (ghost[i + 1].getCol()));
+		inputFile.open("GhostData.txt");
+
+		if (inputFile.is_open())
+		{
+			ghost[i].saveDataToFile(inputFile);
+			inputFile << std::endl;
+
+		}
+		else
+		{
+			std::cout << "Error - unable to open the txt file. \n";
+		}
 	}
+
+	inputFile.close();
 
 	for (int i = 0; i < 4; i++)
 	{

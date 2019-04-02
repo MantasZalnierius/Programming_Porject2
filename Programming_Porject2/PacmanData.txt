@@ -1,4 +1,4 @@
-288 Pacman's X position,
+64 Pacman's X position,
 704 Pacman's Y position,
 204 Pacman's current health,
 32 Pacman's current movement speed,

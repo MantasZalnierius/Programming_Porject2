@@ -29,20 +29,6 @@ void Ghost::setUpSprite()
 void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 {
 
-	inputFile.open("GhostData.txt");
-
-	if (inputFile.is_open())
-	{
-		saveDataToFile(inputFile);
-		inputFile << std::endl;
-
-		inputFile.close();
-	}
-	else
-	{
-		std::cout << "Error - unable to open the txt file. \n";
-	}
-
 	m_col = (static_cast<int>(m_sprite.getPosition().x / 32));
 	m_row = (static_cast<int>(m_sprite.getPosition().y / 32));
 
@@ -216,4 +202,5 @@ void Ghost::saveDataToFile(std::ofstream & t_outputFile)
 	t_outputFile << m_isAlive << " Ghost's status (Boolean),";
 	t_outputFile << std::endl;
 	t_outputFile << randomDirection << " Ghost's current direction,";
+	t_outputFile << std::endl;
 }
