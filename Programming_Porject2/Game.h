@@ -48,7 +48,11 @@ class Game
 	sf::Text returnToMainMenuText;
 	sf::Text youLostText;
 	sf::Text youWonText;
-	std::ofstream inputFile;
+	std::ofstream ghost1InputFile;
+	std::ofstream ghost2InputFile;
+	std::ofstream ghost3InputFile;
+	std::ofstream ghost4InputFile;
+	std::ofstream playerInputFile;
 	int cooldown;
 	int ghostRows[4]{ 2, 2, 2, 2 };
 	int ghostCols[4]{ 2, 3, 4, 5 };
@@ -81,6 +85,7 @@ public:	  // declaration of member functions
 	void	drawGameplayScreen();
 	void	drawYouWinScreen();
 	void	drawYouLoseScreen();
+	void    saveGhostData();
 
 };
 

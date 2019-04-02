@@ -1,5 +1,0 @@
-576 Ghost's X position,
-64 Ghost's Y position,
-1 Ghost's status (Boolean),
-2 Ghost's current direction,
-

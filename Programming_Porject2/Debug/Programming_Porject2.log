@@ -1,3 +1,4 @@
-﻿  Ghost.cpp
-c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\ghost.cpp(144): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  Game.cpp
+  Player.cpp
+  Generating Code...
   Programming_Porject2.vcxproj -> C:\Users\C00241626\Desktop\New folder\Programming_Porject2\Debug\Programming_Porject2.exe

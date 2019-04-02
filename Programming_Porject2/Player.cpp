@@ -36,20 +36,6 @@ void Player::pelletCollision(sf::Sprite t_pellet, int &t_score)
 
 void Player::move(Cell t_typeOfCell[][MAX_COLS])
 {
-	inputFile.open("PacmanData.txt");
-
-	if (inputFile.is_open())
-	{
-		saveDataToFile(inputFile);
-		inputFile << std::endl;
-
-		inputFile.close();
-	}
-	else
-	{
-		std::cout << "Error - unable to open the txt file. \n";
-	}
-
 	m_col = (static_cast<int>(m_sprite.getPosition().x / 32));
 	m_row = (static_cast<int>(m_sprite.getPosition().y / 32));
 
@@ -136,12 +122,12 @@ void Player::saveDataToFile(std::ofstream & t_outputFile)
 	t_outputFile << std::endl;
 	t_outputFile << m_sprite.getPosition().y << " Pacman's Y position,";
 	t_outputFile << std::endl;
-	t_outputFile << m_isAlive << " Pacman's current health,";
+	t_outputFile << health << " Pacman's current health,";
 	t_outputFile << std::endl;
 	t_outputFile << m_speed << " Pacman's current movement speed,";
 }
 
-void Player::collisions()
+void Player::playerCollisions()
 {
 	m_col = (static_cast<int>(2));
 	m_row = (static_cast<int>(22));

@@ -219,29 +219,28 @@ void Game::updatePlayer()
 			}
 		}
 	}
+
+	playerInputFile.open("PacmanData.txt");
+
+	if (playerInputFile.is_open())
+	{
+		player.saveDataToFile(playerInputFile);
+		playerInputFile << std::endl;
+
+		playerInputFile.close();
+	}
+	else
+	{
+		std::cout << "Error - unable to open the txt file. \n";
+	}
 }
 
 void Game::updateGhosts()
 {
-
 	for (int i = 0; i < 4; i++)
 	{
 		ghost[i].move(cellType, ghost[i + 1].getRow(), (ghost[i + 1].getCol()));
-		inputFile.open("GhostData.txt");
-
-		if (inputFile.is_open())
-		{
-			ghost[i].saveDataToFile(inputFile);
-			inputFile << std::endl;
-
-		}
-		else
-		{
-			std::cout << "Error - unable to open the txt file. \n";
-		}
 	}
-
-	inputFile.close();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -251,9 +250,11 @@ void Game::updateGhosts()
 			{
 				ghost[j].setPosition(ghostRows[j], ghostCols[j]);
 			}
-			player.collisions();
+			player.playerCollisions();
 		}
 	}
+
+	saveGhostData();
 }
 
 void Game::updateMainMenuScreen()
@@ -408,6 +409,74 @@ void Game::drawYouLoseScreen()
 	m_window.draw(youLostText);
 	m_window.draw(playerScoreText);
 	m_window.draw(returnToMainMenuText);
+}
+
+void Game::saveGhostData()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (i == 0)
+		{
+			ghost1InputFile.open("Ghost1DataFile.txt");
+
+			if (ghost1InputFile.is_open())
+			{
+				ghost[i].saveDataToFile(ghost1InputFile);
+				ghost1InputFile << std::endl;
+				ghost1InputFile.close();
+			}
+			else
+			{
+				std::cout << "Error - unable to open the txt file. \n";
+			}
+		}
+		if (i == 1)
+		{
+			ghost2InputFile.open("Ghost2DataFile.txt");
+
+			if (ghost2InputFile.is_open())
+			{
+				ghost[i].saveDataToFile(ghost2InputFile);
+				ghost2InputFile << std::endl;
+				ghost2InputFile.close();
+			}
+			else
+			{
+				std::cout << "Error - unable to open the txt file. \n";
+			}
+		}
+		if (i == 2)
+		{
+			ghost3InputFile.open("Ghost3DataFile.txt");
+
+			if (ghost3InputFile.is_open())
+			{
+				ghost[i].saveDataToFile(ghost3InputFile);
+				ghost3InputFile << std::endl;
+				ghost3InputFile.close();
+			}
+			else
+			{
+				std::cout << "Error - unable to open the txt file. \n";
+			}
+		}
+		if (i == 3)
+		{
+			ghost4InputFile.open("Ghost4DataFile.txt");
+
+			if (ghost4InputFile.is_open())
+			{
+				ghost[i].saveDataToFile(ghost4InputFile);
+				ghost4InputFile << std::endl;
+				ghost4InputFile.close();
+			}
+			else
+			{
+				std::cout << "Error - unable to open the txt file. \n";
+			}
+		}
+	}
+	
 }
 
 void Game::processEvents()
