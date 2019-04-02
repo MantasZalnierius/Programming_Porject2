@@ -16,9 +16,13 @@ class Cell
 {
 	TypeOfCell typeOfCell = TypeOfCell::None;
 	sf::Sprite m_sprite;
-	sf::Texture m_emptyCellTexture;
+	sf::Texture m_wallTexture1;
 	sf::Texture m_pelletTexture;
-	sf::Texture m_wallTexture;
+	sf::Texture m_wallTexture2;
+	sf::Texture m_wallTexture3;
+	sf::Texture m_wallTexture4;
+	sf::Texture m_wallTexture5;
+	sf::Texture m_wallTexture6;
 	int m_cellType;
 	bool isAlive;
 

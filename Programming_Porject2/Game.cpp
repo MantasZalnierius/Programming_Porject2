@@ -59,10 +59,20 @@ void Game::setUpGame()
 				while (std::getline(line_ss, item, ',') && dataOK)
 				{
 					std::cout << item << '\n';
+					if (item == "0")
+						setUpArray[i][j] = 0;
 					if (item == "1")
 						setUpArray[i][j] = 1;
 					if (item == "2")
 						setUpArray[i][j] = 2;
+					if (item == "3")
+						setUpArray[i][j] = 3;
+					if (item == "4")
+						setUpArray[i][j] = 4;
+					if (item == "5")
+						setUpArray[i][j] = 5;
+					if (item == "6")
+						setUpArray[i][j] = 6;
 					j++;
 					if (j > MAX_COLS)
 					{
