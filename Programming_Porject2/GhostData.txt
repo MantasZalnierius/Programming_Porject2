@@ -1,0 +1,20 @@
+64 Ghost's X position,
+64 Ghost's Y position,
+1 Ghost's status (Boolean),
+4 Ghost's current direction,
+
+96 Ghost's X position,
+64 Ghost's Y position,
+1 Ghost's status (Boolean),
+1 Ghost's current direction,
+
+128 Ghost's X position,
+64 Ghost's Y position,
+1 Ghost's status (Boolean),
+4 Ghost's current direction,
+
+160 Ghost's X position,
+64 Ghost's Y position,
+1 Ghost's status (Boolean),
+1 Ghost's current direction,
+

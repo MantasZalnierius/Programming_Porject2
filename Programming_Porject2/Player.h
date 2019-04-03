@@ -28,6 +28,9 @@ class Player
 	int m_col;
 	sf::Vector2f m_velocity;
 	int health;
+	sf::Time tv = sf::seconds(0.25f);
+	sf::Clock TimeClock;
+	sf::IntRect pacManFrame = sf::IntRect{0, 0, 32, 35};
 
 
 

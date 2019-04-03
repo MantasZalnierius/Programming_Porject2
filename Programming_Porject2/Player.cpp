@@ -85,28 +85,48 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 
 void Player::setDirection(sf::Event t_event)
 {
+	m_sprite.setTextureRect(pacManFrame);
+
 	if (t_event.key.code == sf::Keyboard::A || t_event.key.code == sf::Keyboard::Left)
 	{
+		if (TimeClock.getElapsedTime() >= tv)
+		{
+			pacManFrame.top = 0.0f;
+		}
+		else
+		{
+			pacManFrame.top += 32.0f;
+		}
 		m_playerDirecrtions = Direction::Left;
-		m_sprite.setTextureRect(sf::IntRect{ 0, 246, 32, 32 });
 	}
 
 	if (t_event.key.code == sf::Keyboard::D || t_event.key.code == sf::Keyboard::Right)
 	{
+		if (TimeClock.getElapsedTime() >= tv)
+		{
+			if(pacManFrame.top >  m_texture.getSize().y / 12)
+			{ 
+				pacManFrame.top = 0.0f;
+			}
+			else
+			{
+				pacManFrame.top += m_texture.getSize().y / 12;
+			}
+		}
+		
 		m_playerDirecrtions = Direction::Right;
-		m_sprite.setTextureRect(sf::IntRect{ 1, 32, 32, 32 });
 	}
 
 	if (t_event.key.code == sf::Keyboard::Up || t_event.key.code == sf::Keyboard::W)
 	{
 		m_playerDirecrtions = Direction::Up;
-		m_sprite.setTextureRect(sf::IntRect{ 0, 395, 32, 32 });
+		m_sprite.setTextureRect(sf::IntRect{ 0, 395, 35, 35 });
 	}
 
 	if (t_event.key.code == sf::Keyboard::S || t_event.key.code == sf::Keyboard::Down)
 	{
 		m_playerDirecrtions = Direction::Down;
-		m_sprite.setTextureRect(sf::IntRect{ 0, 140, 32, 32 });
+		m_sprite.setTextureRect(sf::IntRect{ 0, 140, 35, 35});
 	}
 }
 
