@@ -64,6 +64,13 @@ void Cell::setUpSprites(int t_cellType, int t_row, int t_col)
 		isAlive = true;
 		break;
 
+	case 7:
+		typeOfCell = TypeOfCell::Wall;
+		m_sprite.setTexture(m_wallTexture7);
+		m_sprite.setPosition(sf::Vector2f{ static_cast<float>(t_col * BIT_SIZE), static_cast<float>(t_row * BIT_SIZE) });
+		isAlive = true;
+		break;
+
 	default:
 			break;
 	}
@@ -71,7 +78,7 @@ void Cell::setUpSprites(int t_cellType, int t_row, int t_col)
 
 void Cell::setUpTexture()
 {
-	if (!m_pelletTexture.loadFromFile("ASSETS/IMAGES/bigpill.png"))
+	if (!m_pelletTexture.loadFromFile("ASSETS/IMAGES/smallpill.png"))
 	{
 		std::cout << "Error in loading a texture ";
 	}
@@ -102,6 +109,11 @@ void Cell::setUpTexture()
 	}
 
 	if (!m_wallTexture6.loadFromFile("ASSETS/IMAGES/wall6Down.jpg"))
+	{
+		std::cout << "Error in loading a texture ";
+	}
+
+	if (!m_wallTexture7.loadFromFile("ASSETS/IMAGES/wallCell.jpg"))
 	{
 		std::cout << "Error in loading a texture ";
 	}

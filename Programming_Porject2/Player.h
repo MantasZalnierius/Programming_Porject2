@@ -28,9 +28,14 @@ class Player
 	int m_col;
 	sf::Vector2f m_velocity;
 	int health;
+	int cooldown;
 	sf::Time timeBetweenFrames = sf::seconds(0.25f);
 	sf::Clock TimeClock;
 	sf::IntRect pacManFrame = sf::IntRect{0, 0,  BIT_SIZE_FOR_ANIMATION -2 ,  BIT_SIZE_FOR_ANIMATION - 2 };
+	sf::Sound eattingSound;
+	sf::SoundBuffer eattingSoundBuffer;
+	sf::Sound hittingGhostSound;
+	sf::SoundBuffer hittingGhostSoundBuffer;
 
 
 

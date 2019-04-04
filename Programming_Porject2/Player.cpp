@@ -23,12 +23,29 @@ void Player::setUpSprite()
 	m_velocity = NULL_VELOCITY;
 	m_speed = MAX_SPEED;
 	health = MAX_HEALTH;
+	cooldown = MAX_COOLDOWN_FOR_MOVEMENT;
+
+	if (!eattingSoundBuffer.loadFromFile("ASSETS/SOUND/pacman_chomp.wav"))
+	{
+		std::cout << "Error loading the sound file. ";
+	}
+
+	eattingSound.setBuffer(eattingSoundBuffer);
+	eattingSound.setVolume(VOLUME_NUMBER);
+
+	if (!hittingGhostSoundBuffer.loadFromFile("ASSETS/SOUND/pacman_death.wav"))
+	{
+		std::cout << "Error loading the sound file. ";
+	}
+
+	hittingGhostSound.setBuffer(hittingGhostSoundBuffer);
+	hittingGhostSound.setVolume(VOLUME_NUMBER);
 	
 }
 
 void Player::pelletCollision(int &t_score)
 {
-	t_score += 2;
+	t_score += SCORE_INCREMENT;
 }
 
 void Player::move(Cell t_typeOfCell[][MAX_COLS], int &t_score)
@@ -36,52 +53,61 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS], int &t_score)
 	m_col = (static_cast<int>(m_sprite.getPosition().x / BIT_SIZE));
 	m_row = (static_cast<int>(m_sprite.getPosition().y / BIT_SIZE));
 
-	
-	if (m_playerDirecrtions != Direction::None)
+	if (cooldown <= NULL_COOLDOWN)
 	{
-		m_velocity = NULL_VELOCITY;
-
-		if (m_playerDirecrtions == Direction::Left)
+		if (m_playerDirecrtions != Direction::None)
 		{
-			if (t_typeOfCell[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
+			m_velocity = NULL_VELOCITY;
+
+			if (m_playerDirecrtions == Direction::Left)
 			{
-				m_velocity = { -m_speed, 0.0 };
+				if (t_typeOfCell[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
+				{
+					m_velocity = { -m_speed, 0.0 };
+				}
 			}
-		}
 
-		else if (m_playerDirecrtions == Direction::Right)
-		{
-			if (t_typeOfCell[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
+			else if (m_playerDirecrtions == Direction::Right)
 			{
-				m_velocity = { m_speed, 0.0 };
+				if (t_typeOfCell[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
+				{
+					m_velocity = { m_speed, 0.0 };
+				}
 			}
-		}
 
-		else if (m_playerDirecrtions == Direction::Up)
-		{
-			if (t_typeOfCell[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
+			else if (m_playerDirecrtions == Direction::Up)
 			{
-				m_velocity = { 0.0f, -m_speed };
+				if (t_typeOfCell[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
+				{
+					m_velocity = { 0.0f, -m_speed };
+				}
 			}
-		}
 
-		else if (m_playerDirecrtions == Direction::Down)
-		{
-			if (t_typeOfCell[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
+			else if (m_playerDirecrtions == Direction::Down)
 			{
-				m_velocity = { 0.0f, m_speed };
+				if (t_typeOfCell[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
+				{
+					m_velocity = { 0.0f, m_speed };
+				}
 			}
+
+			m_sprite.move(m_velocity);
+			m_playerDirecrtions = Direction::None;
+			cooldown = MAX_COOLDOWN_FOR_MOVEMENT;
 		}
-
-		m_sprite.move(m_velocity);
-
-		m_playerDirecrtions = Direction::None;
 	}
+	else
+	{
+		cooldown -= 2;
+	}
+	
 	
 	if (t_typeOfCell[m_row][m_col].getStatus() && t_typeOfCell[m_row][m_col].getCell() == TypeOfCell::Pellet)
 	{
 		pelletCollision(t_score);
 		t_typeOfCell[m_row][m_col].playerCollision();
+		eattingSound.play();
+
 	}
 }
 
@@ -180,4 +206,5 @@ void Player::playerCollisions()
 	m_row = (static_cast<int>(START_ROW_FOR_PLAYER));
 	resetPosition(m_col, m_row);
 	health--;
+	hittingGhostSound.play();
 }

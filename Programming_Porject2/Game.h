@@ -2,13 +2,12 @@
 #define GAME
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Globals.h"
 #include <string>
 #include "Ghost.h"
-#include "Pellet.h"
 #include "Player.h"
 #include "Cell.h"
-#include "PowerUp.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -29,6 +28,7 @@ class Game
 	std::string userInput;
 	bool m_gameExit;
 	int score;
+	int highestScore;
 	sf::RenderWindow m_window;
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
@@ -39,7 +39,8 @@ class Game
 	GameScreens gameStates = GameScreens::MainMenu;
 	sf::Font font;
 	sf::Text enterNameText;
-	sf::Text playerScoreText;
+	sf::Text playerScoreTextGameplay;
+	sf::Text playerScoreTextGameOver;
 	sf::Text playerHealthText;
 	sf::Text MainMenuText;
 	sf::Text helpPacmanText;
@@ -48,8 +49,11 @@ class Game
 	sf::Text returnToMainMenuText;
 	sf::Text youLostText;
 	sf::Text youWonText;
-	std::ofstream ghostInputFile;
-	std::ofstream playerInputFile;
+	sf::Text highestScoreText;
+	std::ofstream saveData;
+	sf::Music backgroundMusic;
+	sf::Sprite backgroundSprite;
+	sf::Texture backgroundTexture;
 	int ghostRows[MAX_GHOSTS]{ 2, 10, 15, 22 };
 	int ghostCols[MAX_GHOSTS]{ 2, 7, 19, 22 };
 

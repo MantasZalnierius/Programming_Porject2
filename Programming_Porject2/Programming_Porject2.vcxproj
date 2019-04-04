@@ -147,17 +147,13 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="Pellet.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PowerUp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ghost.cpp" />
-    <ClCompile Include="Pellet.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

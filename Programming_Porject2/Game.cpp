@@ -33,7 +33,22 @@ m_gameExit{ false }
 {
 	// This sets up the game.
 	setUpGame();
+	if (!backgroundMusic.openFromFile("ASSETS/SOUND/pacman_beginning.wav"))
+	{
+		std::cout << "Error opening a sound file. ";
+	}
 
+	backgroundMusic.setLoop(true);
+	backgroundMusic.setVolume(VOLUME_NUMBER);
+	backgroundMusic.play();
+
+	if (!backgroundTexture.loadFromFile("ASSETS/IMAGES/rsz_wallpaper-ms-pacman-screen-game-1280x800.jpg"))
+	{
+		std::cout << "Error loading a texture ";
+	}
+
+	backgroundSprite.setTexture(backgroundTexture);
+	highestScore = score;
 }
 
 void Game::setUpGame()
@@ -45,7 +60,7 @@ void Game::setUpGame()
 	std::string item = "";
 	int row{}, col{};
 	bool dataOK = true;
-	std::ifstream myfile("LevelData.txt");
+	std::ifstream myfile("ASSETS/SAVE_DATA/LevelData.txt");
 
 	if (myfile.is_open())
 	{
@@ -57,7 +72,6 @@ void Game::setUpGame()
 				col = 0;
 				while (std::getline(line_ss, item, ',') && dataOK)
 				{
-					std::cout << item << '\n';
 					if (item == "0")
 						setUpArray[row][col] = 0;
 					if (item == "1")
@@ -72,6 +86,8 @@ void Game::setUpGame()
 						setUpArray[row][col] = 5;
 					if (item == "6")
 						setUpArray[row][col] = 6;
+					if (item == "7")
+						setUpArray[row][col] = 7;
 
 					cellType[row][col].setUpSprites(setUpArray[row][col], row, col);
 
@@ -109,8 +125,10 @@ void Game::loadContent()
 	userInput = "";
 
 	SetupText(enterNameText, sf::Vector2f(250.0f, 370.0f), playerInput);
-	SetupText(playerScoreText, sf::Vector2f(20.0f, 750.0f), (userInput + " Score: " + std::to_string(score)));
-	SetupText(playerHealthText, sf::Vector2f(640.0f, 750.0f), (userInput + " Health: " + std::to_string(player.getHealth())));
+	SetupText(playerScoreTextGameplay, sf::Vector2f(20.0f, 750.0f), (userInput + " Score: " + std::to_string(score)));
+	SetupText(playerScoreTextGameOver, sf::Vector2f(300.0f, 400.0f), (userInput + " Score: " + std::to_string(score)));
+	SetupText(highestScoreText, sf::Vector2f(300.0f, 450.0f), (userInput + " highest score: " + std::to_string(highestScore)));
+	SetupText(playerHealthText, sf::Vector2f(550.0f, 750.0f), (userInput + " Health: " + std::to_string(player.getHealth())));
 	SetupText(MainMenuText, sf::Vector2f(350.0f, 300.0f), "(1) New Game \n\n (2) Controls \n\n (3) Exit ");
 	SetupText(helpGhostText, sf::Vector2f(100.0f, 100.0f), "These are ghosts, they are your eneimes. \n Stay away from them and you'll be fine \n they will navigate through the level looking for you.");
 	SetupText(helpPacmanText, sf::Vector2f(100.0f, 600.0f), "You are Pacman \n your goal is to get every single pellet before the ghosts kill you. \n When a ghost collides with you, you lose 1 live. \n You only have three lives in the game.");
@@ -198,32 +216,21 @@ void Game::updatePlayer()
 {
 	if (player.getHealth() <= LOWEST_HEALTH)
 	{
+		playerScoreTextGameOver.setString(userInput + " Score: " + std::to_string(score));
 		gameStates = GameScreens::YouLost;
+		backgroundMusic.play();
 	}
 
 	if (score >= MAX_SCORE)
 	{
 		gameStates = GameScreens::YouWon;
+		backgroundMusic.play();
 	}
 
-	playerScoreText.setString(userInput + " Score: " + std::to_string(score));
+	playerScoreTextGameplay.setString(userInput + " Score: " + std::to_string(score));
 	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
 
 	player.move(cellType, score);
-
-	playerInputFile.open("PacmanData.txt");
-
-	if (playerInputFile.is_open())
-	{
-		player.saveDataToFile(playerInputFile);
-		playerInputFile << std::endl;
-
-		playerInputFile.close();
-	}
-	else
-	{
-		std::cout << "Error - unable to open the txt file. \n";
-	}
 }
 
 void Game::updateGhosts()
@@ -245,19 +252,27 @@ void Game::updateGhosts()
 		}
 	}
 
-	ghostInputFile.open("GhostData.txt");
+	saveData.open("ASSETS/SAVE_DATA/GameData.txt");
 
-	if (ghostInputFile.is_open())
+	if (saveData.is_open())
 	{
 		for (int i = 0; i < MAX_GHOSTS; i++)
 		{
-			ghostInputFile << "Ghost Number " << std::to_string(i);
-			ghostInputFile << std::endl;
-			ghostInputFile << std::endl;
-			ghost[i].saveDataToFile(ghostInputFile);
-			ghostInputFile << std::endl;
+			saveData << "Ghost Number " << std::to_string(i);
+			saveData << std::endl;
+			saveData << std::endl;
+			ghost[i].saveDataToFile(saveData);
+			saveData << std::endl;
+			saveData << std::endl;
 		}
-		ghostInputFile.close();
+
+		saveData << "Player Data ";
+		saveData << std::endl;
+		saveData << std::endl;
+		player.saveDataToFile(saveData);
+		saveData << std::endl;
+
+		saveData.close();
 	}
 	else
 	{
@@ -279,6 +294,7 @@ void Game::updateMainMenuScreen()
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 		{
+			backgroundMusic.stop();
 			m_gameExit = true;
 		}
 	}
@@ -299,6 +315,15 @@ void Game::updateYouLoseScreen()
 {
 	if (gameStates == GameScreens::YouLost)
 	{
+		highestScoreText.setString(userInput + " highest score: " + std::to_string(highestScore));
+		if (score > highestScore)
+		{
+			highestScore = score;
+		}
+		else
+		{
+			highestScore = highestScore;
+		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 		{
 			player.setUpSprite();
@@ -316,6 +341,15 @@ void Game::updateYouLoseScreen()
 
 void Game::updateYouWinScreen()
 {
+	highestScoreText.setString(userInput + " highest score: " + std::to_string(highestScore));
+	if (highestScore < score)
+	{
+		highestScore = score;
+	}
+	else
+	{
+		highestScore = highestScore;
+	}
 	if (gameStates == GameScreens::YouWon)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
@@ -345,11 +379,13 @@ void Game::render()
 	
 	if (gameStates == GameScreens::EnterName)
 	{
+		m_window.draw(backgroundSprite);
 		m_window.draw(enterNameText);
 	}
 
 	if (gameStates == GameScreens::MainMenu)
 	{
+		m_window.draw(backgroundSprite);
 		m_window.draw(MainMenuText);
 	}
 
@@ -402,21 +438,25 @@ void Game::drawGameplayScreen()
 		m_window.draw(ghost[i].getBody());
 	}
 
-	m_window.draw(playerScoreText);
+	m_window.draw(playerScoreTextGameplay);
 	m_window.draw(playerHealthText);
 }
 
 void Game::drawYouWinScreen()
 {
+	m_window.draw(backgroundSprite);
 	m_window.draw(youWonText);
-	m_window.draw(playerScoreText);
+	m_window.draw(playerScoreTextGameOver);
+	m_window.draw(highestScoreText);
 	m_window.draw(returnToMainMenuText);
 }
 
 void Game::drawYouLoseScreen()
 {
+	m_window.draw(backgroundSprite);
 	m_window.draw(youLostText);
-	m_window.draw(playerScoreText);
+	m_window.draw(highestScoreText);
+	m_window.draw(playerScoreTextGameOver);
 	m_window.draw(returnToMainMenuText);
 }
 
@@ -468,8 +508,11 @@ void Game::UserEnterText(sf::Event t_event)
 		}
 		if ((t_event.text.unicode >= 'a' && t_event.text.unicode <= 'z' || t_event.text.unicode >= 'A' && t_event.text.unicode <= 'Z') || t_event.text.unicode == ' ')
 		{
-			userInput += t_event.text.unicode;
-			enterNameText.setString(playerInput + " " + userInput);
+			if (userInput.length() <= MAX_NUMBER_OF_CHARACTERS)
+			{
+				userInput += t_event.text.unicode;
+				enterNameText.setString(playerInput + " " + userInput);
+			}
 		}
 	}
 	if (userInput != "")
@@ -478,6 +521,7 @@ void Game::UserEnterText(sf::Event t_event)
 		{
 			if (sf::Keyboard::Enter == t_event.key.code)
 			{
+				backgroundMusic.stop();
 				gameStates = GameScreens::GamePlay;
 			}
 		}

@@ -13,7 +13,7 @@ Ghost::Ghost()
 	cooldown = 0;
 	m_texture;
 	m_sprite;
-	cooldown = MAX_COOLDOWN_FOR_GHOST_MOVEMENT;
+	cooldown = MAX_COOLDOWN_FOR_MOVEMENT;
 	ghostCooldown = 5;
 }
 
@@ -100,7 +100,7 @@ void Ghost::move(Cell t_cellType[][MAX_COLS])
 			}
 
 			m_direction = GhostDirection::None;
-			cooldown = MAX_COOLDOWN_FOR_GHOST_MOVEMENT;
+			cooldown = MAX_COOLDOWN_FOR_MOVEMENT;
 		}
 	}
 	else

@@ -2,6 +2,7 @@
 #define CELL
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Globals.h"
 #include <iostream>
 
@@ -23,6 +24,7 @@ class Cell
 	sf::Texture m_wallTexture4;
 	sf::Texture m_wallTexture5;
 	sf::Texture m_wallTexture6;
+	sf::Texture m_wallTexture7;
 	int m_cellType;
 	bool isAlive;
 
