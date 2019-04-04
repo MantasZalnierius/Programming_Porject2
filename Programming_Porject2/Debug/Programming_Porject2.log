@@ -1,2 +1,8 @@
-﻿  Game.cpp
+﻿  Player.cpp
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(90): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(97): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(111): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(117): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(138): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(145): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   Programming_Porject2.vcxproj -> C:\Users\C00241626\Desktop\New folder\Programming_Porject2\Debug\Programming_Porject2.exe

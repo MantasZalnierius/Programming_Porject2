@@ -30,7 +30,7 @@ class Player
 	int health;
 	sf::Time timeBetweenFrames = sf::seconds(0.25f);
 	sf::Clock TimeClock;
-	sf::IntRect pacManFrame = sf::IntRect{0, 0, 32, 35};
+	sf::IntRect pacManFrame = sf::IntRect{0, 0,  33,  33 };
 
 
 

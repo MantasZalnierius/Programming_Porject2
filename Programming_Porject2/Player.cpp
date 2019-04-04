@@ -82,27 +82,46 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 
 void Player::setDirection(sf::Event t_event)
 {
-	m_sprite.setTextureRect(pacManFrame);
 
 	if (t_event.key.code == sf::Keyboard::A || t_event.key.code == sf::Keyboard::Left)
 	{
+		if (pacManFrame.top < 285.0f && pacManFrame.top < 215)
+		{
+			pacManFrame.top = 285.0f;
+		}
+
+		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
+		{
+			if (pacManFrame.top <= 215)
+			{
+				pacManFrame.top = 285.0f;
+			}
+			else
+			{
+				pacManFrame.top -= 35;
+			}
+		}
 		m_playerDirecrtions = Direction::Left;
 	}
 
 	if (t_event.key.code == sf::Keyboard::D || t_event.key.code == sf::Keyboard::Right)
 	{
+		if (pacManFrame.top > 70)
+		{
+			pacManFrame.top = 0.0;
+		}
 		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
 		{
-			if(pacManFrame.top >  m_texture.getSize().y / 12)
-			{ 
+			if (pacManFrame.top >= 70)
+			{
 				pacManFrame.top = 0.0f;
 			}
 			else
 			{
-				pacManFrame.top += m_texture.getSize().y / 12;
+				pacManFrame.top += 35;
 			}
 		}
-		
+
 		m_playerDirecrtions = Direction::Right;
 	}
 
@@ -114,9 +133,27 @@ void Player::setDirection(sf::Event t_event)
 
 	if (t_event.key.code == sf::Keyboard::S || t_event.key.code == sf::Keyboard::Down)
 	{
+		if (pacManFrame.top < 105.0f)
+		{
+			pacManFrame.top = 105.0f;
+		}
+
+		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
+		{
+			if (pacManFrame.top >= 175)
+			{
+				pacManFrame.top = 105.0f;
+			}
+			else
+			{
+				pacManFrame.top += 35;
+			}
+		}
+
 		m_playerDirecrtions = Direction::Down;
-		m_sprite.setTextureRect(sf::IntRect{ 0, 140, 35, 35});
 	}
+
+	m_sprite.setTextureRect(pacManFrame);
 }
 
 void Player::setUpPlayerForHelpScreen()
