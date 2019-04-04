@@ -33,7 +33,6 @@ m_gameExit{ false }
 {
 	// This sets up the game.
 	setUpGame();
-	cooldown = 0;
 
 }
 
@@ -42,46 +41,49 @@ void Game::setUpGame()
 
 	int setUpArray[MAX_ROWS][MAX_COLS]{};
 
-	std::string line;
-	std::string item;
-	int i, j;
+	std::string line = "";
+	std::string item = "";
+	int row{}, col{};
 	bool dataOK = true;
 	std::ifstream myfile("LevelData.txt");
 
 	if (myfile.is_open())
 	{
 
-			i = 0;
+			row = 0;
 			while (std::getline(myfile, line) && dataOK)
 			{
 				std::stringstream line_ss(line);
-				j = 0;
+				col = 0;
 				while (std::getline(line_ss, item, ',') && dataOK)
 				{
 					std::cout << item << '\n';
 					if (item == "0")
-						setUpArray[i][j] = 0;
+						setUpArray[row][col] = 0;
 					if (item == "1")
-						setUpArray[i][j] = 1;
+						setUpArray[row][col] = 1;
 					if (item == "2")
-						setUpArray[i][j] = 2;
+						setUpArray[row][col] = 2;
 					if (item == "3")
-						setUpArray[i][j] = 3;
+						setUpArray[row][col] = 3;
 					if (item == "4")
-						setUpArray[i][j] = 4;
+						setUpArray[row][col] = 4;
 					if (item == "5")
-						setUpArray[i][j] = 5;
+						setUpArray[row][col] = 5;
 					if (item == "6")
-						setUpArray[i][j] = 6;
-					j++;
-					if (j > MAX_COLS)
+						setUpArray[row][col] = 6;
+
+					cellType[row][col].setUpSprites(setUpArray[row][col], row, col);
+
+					col++;
+					if (col > MAX_COLS)
 					{
 						std::cout << "too many cols" << "\n";
 						dataOK = false;
 					}
 				}
-				i++;
-				if (i > MAX_ROWS)
+				row++;
+				if (row > MAX_ROWS)
 				{
 					std::cout << "too many rows" << "\n";
 					dataOK = false;
@@ -94,14 +96,6 @@ void Game::setUpGame()
 	}
 
 	score = 0;
-
-	for (int row = 0; row < MAX_ROWS; row++)
-	{
-		for (int col = 0; col < MAX_COLS; col++)
-		{
-			cellType[row][col].setUpSprites(setUpArray[row][col], row, col);
-		}
-	}
 }
 
 void Game::loadContent()
@@ -123,14 +117,14 @@ void Game::loadContent()
 	SetupText(helpPelletText, sf::Vector2f(100.0f, 350.0f), "These are pellets \n when you eat one of these pellets you will get 2 two points.\n Your goal is to get all of these pellets. ");
 	SetupText(returnToMainMenuText, sf::Vector2f(230.0f, 750.0f), "Press 4 to go back to the main menu ");
 	SetupText(youLostText, sf::Vector2f(300.0f, 350.0f), "You Lost The Game ");
-	SetupText(youWonText, sf::Vector2f(300.0f, 350.0f), "You Lost The Game ");
+	SetupText(youWonText, sf::Vector2f(300.0f, 350.0f), "You Won The Game ");
 }
 
 void Game::SetupText(sf::Text &t_text, sf::Vector2f t_position, std::string t_sentence)
 {
 	t_text.setFont(font);  // set the font for the text
-	t_text.setCharacterSize(30); // set the text size
-	t_text.setFillColor(sf::Color::White); // set the text colour
+	t_text.setCharacterSize(MAX_CHARACTER_SIZE); // set the text size
+	t_text.setFillColor(WHITE); // set the text colour
 	t_text.setPosition(t_position);  // its position on the screen
 	t_text.setString(t_sentence); // This sets the string to the text.
 }
@@ -189,7 +183,6 @@ void Game::update(sf::Time t_deltaTime)
 	updateGamePlayScreen();
 	updateYouLoseScreen();
 	updateYouWinScreen();
-	std::ofstream outputFile;
 }
 
 void Game::updateGamePlayScreen()
@@ -203,12 +196,12 @@ void Game::updateGamePlayScreen()
 
 void Game::updatePlayer()
 {
-	if (player.getHealth() <= 0)
+	if (player.getHealth() <= LOWEST_HEALTH)
 	{
 		gameStates = GameScreens::YouLost;
 	}
 
-	if (score >= 356)
+	if (score >= MAX_SCORE)
 	{
 		gameStates = GameScreens::YouWon;
 	}
@@ -216,12 +209,7 @@ void Game::updatePlayer()
 	playerScoreText.setString(userInput + " Score: " + std::to_string(score));
 	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
 
-	player.move(cellType);
-
-	if (cellType[player.getRow()][player.getCol()].getStatus() && cellType[player.getRow()][player.getCol()].getCell() == TypeOfCell::Pellet)
-	{
-		cellType[player.getRow()][player.getCol()].playerCollision(player.getBody());
-	}
+	player.move(cellType, score);
 
 	playerInputFile.open("PacmanData.txt");
 
@@ -240,16 +228,16 @@ void Game::updatePlayer()
 
 void Game::updateGhosts()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_GHOSTS; i++)
 	{
-		ghost[i].move(cellType, ghost[i + 1].getRow(), (ghost[i + 1].getCol()));
+		ghost[i].move(cellType);
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_GHOSTS; i++)
 	{
 		if (ghost[i].getCol() == player.getCol() && ghost[i].getRow() == player.getRow())
 		{
-			for (int j = 0; j < 4; j++)
+			for (int j = 0; j < MAX_GHOSTS; j++)
 			{
 				ghost[j].setPosition(ghostRows[j], ghostCols[j]);
 			}
@@ -257,7 +245,24 @@ void Game::updateGhosts()
 		}
 	}
 
-	saveGhostData();
+	ghostInputFile.open("GhostData.txt");
+
+	if (ghostInputFile.is_open())
+	{
+		for (int i = 0; i < MAX_GHOSTS; i++)
+		{
+			ghostInputFile << "Ghost Number " << std::to_string(i);
+			ghostInputFile << std::endl;
+			ghostInputFile << std::endl;
+			ghost[i].saveDataToFile(ghostInputFile);
+			ghostInputFile << std::endl;
+		}
+		ghostInputFile.close();
+	}
+	else
+	{
+		std::cout << "Error - unable to open the txt file. \n";
+	}
 }
 
 void Game::updateMainMenuScreen()
@@ -299,7 +304,7 @@ void Game::updateYouLoseScreen()
 			player.setUpSprite();
 			setUpGame();
 			loadContent();
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < MAX_GHOSTS; i++)
 			{
 				ghost[i].setUpSprite();
 				ghost[i].setPosition(ghostRows[i], ghostCols[i]);
@@ -318,7 +323,7 @@ void Game::updateYouWinScreen()
 			player.setUpSprite();
 			setUpGame();
 			loadContent();
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < MAX_GHOSTS; i++)
 			{
 				ghost[i].setUpSprite();
 				ghost[i].setPosition(ghostRows[i], ghostCols[i]);
@@ -389,9 +394,10 @@ void Game::drawGameplayScreen()
 			}
 		}
 	}
+
 	m_window.draw(player.getBody());
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_GHOSTS; i++)
 	{
 		m_window.draw(ghost[i].getBody());
 	}
@@ -414,24 +420,6 @@ void Game::drawYouLoseScreen()
 	m_window.draw(returnToMainMenuText);
 }
 
-void Game::saveGhostData()
-{
-	ghost1InputFile.open("GhostData.txt");
-
-	for (int i = 0; i < 4; i++)
-	{
-			if (ghost1InputFile.is_open())
-			{
-				ghost[i].saveDataToFile(ghost1InputFile);
-				ghost1InputFile << std::endl;
-			}
-			else
-			{
-				std::cout << "Error - unable to open the txt file. \n";
-			}
-	}
-	
-}
 
 void Game::processEvents()
 {

@@ -15,31 +15,31 @@ void Player::setUpSprite()
 	{
 		std::cout << "Error ";
 	}
-	m_row = 22;
-	m_col = 2;
+	m_row = START_ROW_FOR_PLAYER;
+	m_col = START_COL_FOR_PLAYER;
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
-	m_sprite.setPosition(m_col * 32.0f, m_row * 32.0f);
-	m_velocity = { 0.0f, 0.0f };
-	m_speed = 32.0f;
-	health = 3;
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, BIT_SIZE, BIT_SIZE });
+	m_sprite.setPosition(m_col * BIT_SIZE, m_row * BIT_SIZE);
+	m_velocity = NULL_VELOCITY;
+	m_speed = MAX_SPEED;
+	health = MAX_HEALTH;
 	
 }
 
-void Player::pelletCollision(sf::Sprite t_pellet, int &t_score)
+void Player::pelletCollision(int &t_score)
 {
 	t_score += 2;
 }
 
-void Player::move(Cell t_typeOfCell[][MAX_COLS])
+void Player::move(Cell t_typeOfCell[][MAX_COLS], int &t_score)
 {
-	m_col = (static_cast<int>(m_sprite.getPosition().x / 32));
-	m_row = (static_cast<int>(m_sprite.getPosition().y / 32));
+	m_col = (static_cast<int>(m_sprite.getPosition().x / BIT_SIZE));
+	m_row = (static_cast<int>(m_sprite.getPosition().y / BIT_SIZE));
 
 	
 	if (m_playerDirecrtions != Direction::None)
 	{
-		m_velocity = { 0.0, 0.0 };
+		m_velocity = NULL_VELOCITY;
 
 		if (m_playerDirecrtions == Direction::Left)
 		{
@@ -78,6 +78,11 @@ void Player::move(Cell t_typeOfCell[][MAX_COLS])
 		m_playerDirecrtions = Direction::None;
 	}
 	
+	if (t_typeOfCell[m_row][m_col].getStatus() && t_typeOfCell[m_row][m_col].getCell() == TypeOfCell::Pellet)
+	{
+		pelletCollision(t_score);
+		t_typeOfCell[m_row][m_col].playerCollision();
+	}
 }
 
 void Player::setDirection(sf::Event t_event)
@@ -85,20 +90,15 @@ void Player::setDirection(sf::Event t_event)
 
 	if (t_event.key.code == sf::Keyboard::A || t_event.key.code == sf::Keyboard::Left)
 	{
-		if (pacManFrame.top < 285.0f && pacManFrame.top < 215)
-		{
-			pacManFrame.top = 285.0f;
-		}
-
 		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
 		{
-			if (pacManFrame.top <= 215)
+			if (pacManFrame.top <= 215 || pacManFrame.top > 285)
 			{
 				pacManFrame.top = 285.0f;
 			}
 			else
 			{
-				pacManFrame.top -= 35;
+				pacManFrame.top -= BIT_SIZE_FOR_ANIMATION;
 			}
 		}
 		m_playerDirecrtions = Direction::Left;
@@ -106,10 +106,6 @@ void Player::setDirection(sf::Event t_event)
 
 	if (t_event.key.code == sf::Keyboard::D || t_event.key.code == sf::Keyboard::Right)
 	{
-		if (pacManFrame.top > 70)
-		{
-			pacManFrame.top = 0.0;
-		}
 		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
 		{
 			if (pacManFrame.top >= 70)
@@ -118,7 +114,7 @@ void Player::setDirection(sf::Event t_event)
 			}
 			else
 			{
-				pacManFrame.top += 35;
+				pacManFrame.top += BIT_SIZE_FOR_ANIMATION;
 			}
 		}
 
@@ -127,26 +123,31 @@ void Player::setDirection(sf::Event t_event)
 
 	if (t_event.key.code == sf::Keyboard::Up || t_event.key.code == sf::Keyboard::W)
 	{
+		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
+		{
+			if (pacManFrame.top >= 390 || pacManFrame.top < 320.0f)
+			{
+				pacManFrame.top = 320.0f;
+			}
+			else
+			{
+				pacManFrame.top += BIT_SIZE_FOR_ANIMATION;
+			}
+		}
 		m_playerDirecrtions = Direction::Up;
-		m_sprite.setTextureRect(sf::IntRect{ 0, 395, 35, 35 });
 	}
 
 	if (t_event.key.code == sf::Keyboard::S || t_event.key.code == sf::Keyboard::Down)
 	{
-		if (pacManFrame.top < 105.0f)
-		{
-			pacManFrame.top = 105.0f;
-		}
-
 		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
 		{
-			if (pacManFrame.top >= 175)
+			if (pacManFrame.top >= 175 || pacManFrame.top < 105.0f)
 			{
 				pacManFrame.top = 105.0f;
 			}
 			else
 			{
-				pacManFrame.top += 35;
+				pacManFrame.top += BIT_SIZE_FOR_ANIMATION;
 			}
 		}
 
@@ -159,7 +160,7 @@ void Player::setDirection(sf::Event t_event)
 void Player::setUpPlayerForHelpScreen()
 {
 	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(50, 600);
+	m_sprite.setPosition(PLAYER_FOR_HELP_SCREEN_POSITION);
 }
 
 void Player::saveDataToFile(std::ofstream & t_outputFile)
@@ -175,8 +176,8 @@ void Player::saveDataToFile(std::ofstream & t_outputFile)
 
 void Player::playerCollisions()
 {
-	m_col = (static_cast<int>(2));
-	m_row = (static_cast<int>(22));
-	resetPosition(2, 22);
+	m_col = (static_cast<int>(START_COL_FOR_PLAYER));
+	m_row = (static_cast<int>(START_ROW_FOR_PLAYER));
+	resetPosition(m_col, m_row);
 	health--;
 }

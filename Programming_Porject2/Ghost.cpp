@@ -5,15 +5,15 @@ Ghost::Ghost()
 	setUpSprite();
 	randomDirection = rand() % 4 + 1;
 	m_isAlive = true;
-	m_speed = 32;
-	m_velocity = { 0.0, 0.0 };
-	m_direction = GhostDirection::Left;
+	m_speed = MAX_SPEED;
+	m_velocity = NULL_VELOCITY;
+	m_direction = GhostDirection::None;
 	m_row = 0;
 	m_col = 0;
 	cooldown = 0;
 	m_texture;
 	m_sprite;
-	cooldown = 15;
+	cooldown = MAX_COOLDOWN_FOR_GHOST_MOVEMENT;
 	ghostCooldown = 5;
 }
 
@@ -26,7 +26,7 @@ void Ghost::setUpSprite()
 {
 }
 
-void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
+void Ghost::move(Cell t_cellType[][MAX_COLS])
 {
 
 	m_col = (static_cast<int>(m_sprite.getPosition().x / 32));
@@ -41,14 +41,14 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 	{
 		if (m_direction != GhostDirection::None)
 		{
-			m_velocity = { 0.0, 0.0 };
+			m_velocity = NULL_VELOCITY;
 
 			if (m_direction == GhostDirection::Left)
 			{
-				if (t_cellType[m_row][m_col - 1].getCell() != TypeOfCell::Wall || !m_row == t_rows && m_col == t_cols - 1)
+				if (t_cellType[m_row][m_col - 1].getCell() != TypeOfCell::Wall)
 				{
 					m_velocity = { -m_speed, 0.0 };
-					m_sprite.setTextureRect(sf::IntRect{ 0, 32, 32, 32 });
+					m_sprite.setTextureRect(sf::IntRect{ 0, BIT_SIZE, BIT_SIZE, BIT_SIZE });
 					m_sprite.move(m_velocity);
 				}
 				else
@@ -59,10 +59,10 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 
 			else if (m_direction == GhostDirection::Right)
 			{
-				if (t_cellType[m_row][m_col + 1].getCell() != TypeOfCell::Wall || !m_row == t_rows && m_col == t_cols + 1)
+				if (t_cellType[m_row][m_col + 1].getCell() != TypeOfCell::Wall)
 				{
 					m_velocity = { m_speed, 0.0 };
-					m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+					m_sprite.setTextureRect(sf::IntRect{ 0, 0, BIT_SIZE, BIT_SIZE });
 					m_sprite.move(m_velocity);
 				}
 				else
@@ -73,10 +73,10 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 
 			else if (m_direction == GhostDirection::Up)
 			{
-				if (t_cellType[m_row - 1][m_col].getCell() != TypeOfCell::Wall || !m_row == t_rows - 1 && m_col == t_cols)
+				if (t_cellType[m_row - 1][m_col].getCell() != TypeOfCell::Wall)
 				{
 					m_velocity = { 0.0f, -m_speed };
-					m_sprite.setTextureRect(sf::IntRect{ 0, 96, 32, 32 });
+					m_sprite.setTextureRect(sf::IntRect{ 0, BIT_SIZE * 3, BIT_SIZE, BIT_SIZE });
 					m_sprite.move(m_velocity);
 				}
 				else
@@ -87,10 +87,10 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 
 			else if (m_direction == GhostDirection::Down)
 			{
-				if (t_cellType[m_row + 1][m_col].getCell() != TypeOfCell::Wall || !m_row == t_rows + 1 && m_col == t_cols)
+				if (t_cellType[m_row + 1][m_col].getCell() != TypeOfCell::Wall)
 				{
 					m_velocity = { 0.0f, m_speed };
-					m_sprite.setTextureRect(sf::IntRect{ 0, 64, 32, 32 });
+					m_sprite.setTextureRect(sf::IntRect{ 0, BIT_SIZE * 2, BIT_SIZE, BIT_SIZE });
 					m_sprite.move(m_velocity);
 				}
 				else
@@ -100,7 +100,7 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 			}
 
 			m_direction = GhostDirection::None;
-			cooldown = 15;
+			cooldown = MAX_COOLDOWN_FOR_GHOST_MOVEMENT;
 		}
 	}
 	else
@@ -108,9 +108,9 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 		cooldown--;
 	}
 
-	if (ghostCooldown <= 0)
+	if (ghostCooldown <= NULL_COOLDOWN)
 	{
-		ghostCooldown = 5 * 60;
+		ghostCooldown = 5 * 40;
 		randomDirection = (rand() % 4) + 1;
 	}
 	else
@@ -121,19 +121,19 @@ void Ghost::move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols)
 
 void Ghost::setDirection()
 {
-	if (randomDirection == 1)
+	if (randomDirection == LEFT)
 	{
 		m_direction = GhostDirection::Left;
 	}
-	else if (randomDirection == 2)
+	else if (randomDirection == RIGHT)
 	{
 		m_direction = GhostDirection::Right;
 	}
-	else if (randomDirection == 3)
+	else if (randomDirection == UP)
 	{
 		m_direction = GhostDirection::Up;
 	}
-	else if (randomDirection == 4)
+	else if (randomDirection == DOWN)
 	{
 		m_direction = GhostDirection::Down;
 	}
@@ -141,7 +141,7 @@ void Ghost::setDirection()
 
 void Ghost::setPosition(int row, int col)
 {
-	m_sprite.setPosition(col * 32, row * 32);
+	m_sprite.setPosition(col * BIT_SIZE, row * BIT_SIZE);
 }
 
 void Ghost::setTextureForPurpleGhost()
@@ -152,7 +152,7 @@ void Ghost::setTextureForPurpleGhost()
 	}
 
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, BIT_SIZE, BIT_SIZE });
 }
 
 void Ghost::setTextureForRedGhost()
@@ -163,7 +163,7 @@ void Ghost::setTextureForRedGhost()
 	}
 
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, BIT_SIZE, BIT_SIZE });
 }
 
 void Ghost::setTextureForGreenGhost()
@@ -174,7 +174,7 @@ void Ghost::setTextureForGreenGhost()
 	}
 
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, BIT_SIZE, BIT_SIZE });
 }
 
 void Ghost::setTextureForBlueGhost()
@@ -185,12 +185,12 @@ void Ghost::setTextureForBlueGhost()
 	}
 
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, BIT_SIZE, BIT_SIZE });
 }
 
 void Ghost::setUpPositionForGhostForHelpScreen()
 {
-	m_sprite.setPosition(50, 100);
+	m_sprite.setPosition(GHOST_FOR_HELP_SCREEN_POSITION);
 }
 
 void Ghost::saveDataToFile(std::ofstream & t_outputFile)

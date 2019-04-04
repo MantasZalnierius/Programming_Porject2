@@ -32,7 +32,7 @@ class Game
 	sf::RenderWindow m_window;
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
-	Ghost ghost[4];
+	Ghost ghost[MAX_GHOSTS];
 	Ghost helpGhost;
 	Player helpPlayer;
 	Cell  helpPellet;
@@ -48,18 +48,10 @@ class Game
 	sf::Text returnToMainMenuText;
 	sf::Text youLostText;
 	sf::Text youWonText;
-	std::ofstream ghost1InputFile;
-	std::ofstream ghost2InputFile;
-	std::ofstream ghost3InputFile;
-	std::ofstream ghost4InputFile;
+	std::ofstream ghostInputFile;
 	std::ofstream playerInputFile;
-	int cooldown;
-	int ghostRows[4]{ 2, 2, 2, 2 };
-	int ghostCols[4]{ 2, 3, 4, 5 };
-	//int ghostRows[4]{ 2, 10, 15, 22 };
-	//int ghostCols[4]{ 2, 7, 19, 22 };
-
-//	std::ofs
+	int ghostRows[MAX_GHOSTS]{ 2, 10, 15, 22 };
+	int ghostCols[MAX_GHOSTS]{ 2, 7, 19, 22 };
 
 
 public:	  // declaration of member functions	
@@ -85,7 +77,6 @@ public:	  // declaration of member functions
 	void	drawGameplayScreen();
 	void	drawYouWinScreen();
 	void	drawYouLoseScreen();
-	void    saveGhostData();
 
 };
 

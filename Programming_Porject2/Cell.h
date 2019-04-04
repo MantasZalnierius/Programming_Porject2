@@ -29,13 +29,13 @@ class Cell
 public:
 	   Cell();
 	  ~Cell();
- void  setUpSprites(int t_cellType, int t_row, int t_col);
- void  setUpTexture();
- inline sf::Sprite getBody() { return m_sprite; }
- inline TypeOfCell getCell() { return typeOfCell; }
- inline bool getStatus() { return isAlive; }
- void playerCollision(sf::Sprite t_playerSprite);
- void setUpPelletForHelpScreen();
+		void  setUpSprites(int t_cellType, int t_row, int t_col);
+		void  setUpTexture();
+		inline sf::Sprite getBody() { return m_sprite; }
+		inline TypeOfCell getCell() { return typeOfCell; }
+		inline bool getStatus() { return isAlive; }
+		void playerCollision();
+		void setUpPelletForHelpScreen();
 
 };
 

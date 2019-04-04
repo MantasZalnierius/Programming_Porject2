@@ -30,7 +30,7 @@ class Player
 	int health;
 	sf::Time timeBetweenFrames = sf::seconds(0.25f);
 	sf::Clock TimeClock;
-	sf::IntRect pacManFrame = sf::IntRect{0, 0,  33,  33 };
+	sf::IntRect pacManFrame = sf::IntRect{0, 0,  BIT_SIZE_FOR_ANIMATION -2 ,  BIT_SIZE_FOR_ANIMATION - 2 };
 
 
 
@@ -38,13 +38,13 @@ public:
 	Player();
 	~Player();
 	void setUpSprite();
-	void pelletCollision(sf::Sprite t_pellet, int &t_score);
+	void pelletCollision(int &t_score);
 	inline sf::Sprite getBody() { return m_sprite; }
 	inline int getRow() { return m_row; }
 	inline int getCol() { return m_col; }
 	inline void setCol(int t_col) { m_col = t_col; }
 	inline void setRow(int t_row) { m_row = t_row; }
-	void move(Cell t_typeOfCell[][MAX_COLS]);
+	void move(Cell t_typeOfCell[][MAX_COLS], int &t_score);
 	inline Direction getDirection() { return m_playerDirecrtions; }
 	void setDirection(sf::Event t_event);
 	inline void sets(Direction t_playerDirection) { m_playerDirecrtions = t_playerDirection; }

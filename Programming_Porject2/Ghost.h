@@ -36,7 +36,7 @@ public:
 	Ghost();
 	~Ghost();
 	void setUpSprite();
-	void move(Cell t_cellType[][MAX_COLS], int t_rows, int t_cols);
+	void move(Cell t_cellType[][MAX_COLS]);
 	void setDirection();
 	inline sf::Sprite getBody() { return m_sprite; }
 	inline int getRow() { return m_row; }

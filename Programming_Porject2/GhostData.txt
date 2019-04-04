@@ -1,20 +1,28 @@
-64 Ghost's X position,
-64 Ghost's Y position,
-1 Ghost's status (Boolean),
-1 Ghost's current direction,
-
-96 Ghost's X position,
-64 Ghost's Y position,
-1 Ghost's status (Boolean),
-1 Ghost's current direction,
-
-128 Ghost's X position,
-64 Ghost's Y position,
-1 Ghost's status (Boolean),
-3 Ghost's current direction,
+Ghost Number 0
 
 160 Ghost's X position,
 64 Ghost's Y position,
 1 Ghost's status (Boolean),
-4 Ghost's current direction,
+2 Ghost's current direction,
+
+Ghost Number 1
+
+480 Ghost's X position,
+320 Ghost's Y position,
+1 Ghost's status (Boolean),
+1 Ghost's current direction,
+
+Ghost Number 2
+
+704 Ghost's X position,
+224 Ghost's Y position,
+1 Ghost's status (Boolean),
+3 Ghost's current direction,
+
+Ghost Number 3
+
+640 Ghost's X position,
+704 Ghost's Y position,
+1 Ghost's status (Boolean),
+1 Ghost's current direction,
 
