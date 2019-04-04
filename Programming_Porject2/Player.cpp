@@ -18,7 +18,7 @@ void Player::setUpSprite()
 	m_row = 22;
 	m_col = 2;
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect{ 1, 32, 32, 32 });
+	m_sprite.setTextureRect(sf::IntRect{ 0, 0, 32, 32 });
 	m_sprite.setPosition(m_col * 32.0f, m_row * 32.0f);
 	m_velocity = { 0.0f, 0.0f };
 	m_speed = 32.0f;
@@ -28,10 +28,7 @@ void Player::setUpSprite()
 
 void Player::pelletCollision(sf::Sprite t_pellet, int &t_score)
 {
-	if (t_pellet.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
-	{
-		t_score += 2;
-	}
+	t_score += 2;
 }
 
 void Player::move(Cell t_typeOfCell[][MAX_COLS])
@@ -89,20 +86,12 @@ void Player::setDirection(sf::Event t_event)
 
 	if (t_event.key.code == sf::Keyboard::A || t_event.key.code == sf::Keyboard::Left)
 	{
-		if (TimeClock.getElapsedTime() >= tv)
-		{
-			pacManFrame.top = 0.0f;
-		}
-		else
-		{
-			pacManFrame.top += 32.0f;
-		}
 		m_playerDirecrtions = Direction::Left;
 	}
 
 	if (t_event.key.code == sf::Keyboard::D || t_event.key.code == sf::Keyboard::Right)
 	{
-		if (TimeClock.getElapsedTime() >= tv)
+		if (TimeClock.getElapsedTime() >= timeBetweenFrames)
 		{
 			if(pacManFrame.top >  m_texture.getSize().y / 12)
 			{ 

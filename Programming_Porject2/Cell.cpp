@@ -108,10 +108,7 @@ void Cell::setUpTexture()
 
 void Cell::playerCollision(sf::Sprite t_playerSprite)
 {
-	if (t_playerSprite.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
-	{
-		isAlive = false;
-	}
+	isAlive = false;
 }
 
 void Cell::setUpPelletForHelpScreen()

@@ -218,16 +218,9 @@ void Game::updatePlayer()
 
 	player.move(cellType);
 
-	for (int row = 0; row < MAX_ROWS; row++)
+	if (cellType[player.getRow()][player.getCol()].getStatus() && cellType[player.getRow()][player.getCol()].getCell() == TypeOfCell::Pellet)
 	{
-		for (int col = 0; col < MAX_COLS; col++)
-		{
-			if (cellType[row][col].getStatus() && cellType[row][col].getCell() == TypeOfCell::Pellet)
-			{
-				cellType[row][col].playerCollision(player.getBody());
-				player.pelletCollision(cellType[row][col].getBody(), score);
-			}
-		}
+		cellType[player.getRow()][player.getCol()].playerCollision(player.getBody());
 	}
 
 	playerInputFile.open("PacmanData.txt");

@@ -1,6 +1,2 @@
-﻿  Player.cpp
-c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(94): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(98): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(107): warning C4018: '>': signed/unsigned mismatch
-c:\users\c00241626\desktop\new folder\programming_porject2\programming_porject2\player.cpp(109): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+﻿  Game.cpp
   Programming_Porject2.vcxproj -> C:\Users\C00241626\Desktop\New folder\Programming_Porject2\Debug\Programming_Porject2.exe
