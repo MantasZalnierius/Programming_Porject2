@@ -1,3 +1,14 @@
+/// <summary>
+/// @author = Mantas Zalnierius
+/// @date = 7th of April 2019
+/// 
+/// Time Taken: 33 hours
+/// 
+/// Description: This is a 2d pacman game, where you will be able to move either down, left, right or up. Your goal of the is to get all the pellets
+/// before you lose all of your health by the ghosts.
+/// Known bugs: The ghosts can still walk into each other, I've spent some time, on trying to make it work. but I didn't have the time to do so.
+/// 
+
 #ifdef _DEBUG 
 #pragma comment(lib,"sfml-graphics-d.lib") 
 #pragma comment(lib,"sfml-audio-d.lib") 
@@ -33,26 +44,21 @@ m_gameExit{ false }
 {
 	// This sets up the game.
 	setUpGame();
-	if (!backgroundMusic.openFromFile("ASSETS/SOUND/pacman_beginning.wav"))
-	{
-		std::cout << "Error opening a sound file. ";
-	}
 
+	if (!backgroundMusic.openFromFile("ASSETS/SOUND/pacman_beginning.wav")) std::cout << "Error opening a sound file. ";
 	backgroundMusic.setLoop(true);
 	backgroundMusic.setVolume(VOLUME_NUMBER);
 	backgroundMusic.play();
 
-	if (!backgroundTexture.loadFromFile("ASSETS/IMAGES/rsz_wallpaper-ms-pacman-screen-game-1280x800.jpg"))
-	{
-		std::cout << "Error loading a texture ";
-	}
-
+	if (!backgroundTexture.loadFromFile("ASSETS/IMAGES/rsz_wallpaper-ms-pacman-screen-game-1280x800.jpg")) std::cout << "Error loading a texture ";
 	backgroundSprite.setTexture(backgroundTexture);
-	highestScore = score;
 }
-
+/// <summary>
+/// This function loads the game data from a .txt file and sets up the level using that data.
+/// </summary>
 void Game::setUpGame()
 {
+	// This sets up the level, by loading a .txt file.
 
 	int setUpArray[MAX_ROWS][MAX_COLS]{};
 
@@ -70,24 +76,16 @@ void Game::setUpGame()
 			{
 				std::stringstream line_ss(line);
 				col = 0;
-				while (std::getline(line_ss, item, ',') && dataOK)
+				while (std::getline(line_ss, item, ',') && dataOK) // Looks at each line and sees what's between all the commas.
 				{
-					if (item == "0")
-						setUpArray[row][col] = 0;
-					if (item == "1")
-						setUpArray[row][col] = 1;
-					if (item == "2")
-						setUpArray[row][col] = 2;
-					if (item == "3")
-						setUpArray[row][col] = 3;
-					if (item == "4")
-						setUpArray[row][col] = 4;
-					if (item == "5")
-						setUpArray[row][col] = 5;
-					if (item == "6")
-						setUpArray[row][col] = 6;
-					if (item == "7")
-						setUpArray[row][col] = 7;
+					if (item == "0") setUpArray[row][col] = 0;
+					if (item == "1") setUpArray[row][col] = 1;
+					if (item == "2") setUpArray[row][col] = 2;
+					if (item == "3") setUpArray[row][col] = 3;
+					if (item == "4") setUpArray[row][col] = 4;
+					if (item == "5") setUpArray[row][col] = 5;
+					if (item == "6") setUpArray[row][col] = 6;
+					if (item == "7") setUpArray[row][col] = 7;
 
 					cellType[row][col].setUpSprites(setUpArray[row][col], row, col);
 
@@ -112,14 +110,17 @@ void Game::setUpGame()
 	}
 
 	score = 0;
+	highestScore = score;
 }
 
+/// <summary>
+/// This function sets up all the text that is needed for the game.
+/// </summary>
 void Game::loadContent()
 {
-	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
-	{
-		std::cout << "Error ";
-	}
+	// This sets all the text and font for the game 
+
+	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf")) std::cout << "Error ";
 
 	playerInput = "Enter your name: ";
 	userInput = "";
@@ -131,13 +132,22 @@ void Game::loadContent()
 	SetupText(playerHealthText, sf::Vector2f(550.0f, 750.0f), (userInput + " Health: " + std::to_string(player.getHealth())));
 	SetupText(MainMenuText, sf::Vector2f(350.0f, 300.0f), "(1) New Game \n\n (2) Controls \n\n (3) Exit ");
 	SetupText(helpGhostText, sf::Vector2f(100.0f, 100.0f), "These are ghosts, they are your eneimes. \n Stay away from them and you'll be fine \n they will navigate through the level looking for you.");
-	SetupText(helpPacmanText, sf::Vector2f(100.0f, 600.0f), "You are Pacman \n your goal is to get every single pellet before the ghosts kill you. \n When a ghost collides with you, you lose 1 live. \n You only have three lives in the game.");
+	SetupText(helpPacmanText, sf::Vector2f(100.0f, 600.0f), "You are Pacman, You can move using the arrow or the WASD keys\n your goal is to get every single pellet before the ghosts kill you. \n When a ghost collides with you, you lose 1 live. \n You only have three lives in the game.");
 	SetupText(helpPelletText, sf::Vector2f(100.0f, 350.0f), "These are pellets \n when you eat one of these pellets you will get 2 two points.\n Your goal is to get all of these pellets. ");
 	SetupText(returnToMainMenuText, sf::Vector2f(230.0f, 750.0f), "Press 4 to go back to the main menu ");
 	SetupText(youLostText, sf::Vector2f(300.0f, 350.0f), "You Lost The Game ");
 	SetupText(youWonText, sf::Vector2f(300.0f, 350.0f), "You Won The Game ");
+
+	// This sets all the text and font for the game 
 }
 
+/// <summary>
+/// This sets up text one by one, by passing the sf::text(by reference) and the position and the exact string
+/// assoicated with that sf::text.
+/// </summary>
+/// <param name="t_text"></param>
+/// <param name="t_position"></param>
+/// <param name="t_sentence"></param>
 void Game::SetupText(sf::Text &t_text, sf::Vector2f t_position, std::string t_sentence)
 {
 	t_text.setFont(font);  // set the font for the text
@@ -152,12 +162,16 @@ Game::~Game()
 {
 }
 
-
+/// <summary>
+/// This function runs the game, until it's closed.
+/// </summary>
 void Game::run()
 {
 	sf::Clock clock; // This initialize's the Clock object into memory.
 	sf::Time timeSinceLastUpdate = sf::Time::Zero; // This lets the Time object equal to Zero.
 	sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 fps
+
+	// This sets the starting position and texture for all the ghosts.
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -175,6 +189,8 @@ void Game::run()
 	helpPellet.setUpPelletForHelpScreen();
 	helpPlayer.setUpPlayerForHelpScreen();
 
+	// This sets the starting position and texture for all the ghosts.
+
 	while (m_window.isOpen())
 	{
 		processEvents(); // as many as possible
@@ -189,20 +205,27 @@ void Game::run()
 	}
 }
 
-
+/// <summary>
+/// This function updates the game every 60th of a second.
+/// </summary>
+/// <param name="t_deltaTime"></param>
 void Game::update(sf::Time t_deltaTime)
 {
-	if (m_gameExit)
-	{
-		m_window.close(); // This closes the window.
-	}
+	// This updates everything in the game.
+
+	if (m_gameExit) m_window.close(); // This closes the window.
 	updateMainMenuScreen();
 	updateHelpScreen();
 	updateGamePlayScreen();
 	updateYouLoseScreen();
 	updateYouWinScreen();
+
+	// This updates everything in the game.
 }
 
+/// <summary>
+/// This function updates the game play screen every 60th of a second.
+/// </summary>
 void Game::updateGamePlayScreen()
 {
 	if (gameStates == GameScreens::GamePlay)
@@ -212,16 +235,21 @@ void Game::updateGamePlayScreen()
 	}
 }
 
+/// <summary>
+/// This function updates the player every 60th of a second.
+/// </summary>
 void Game::updatePlayer()
 {
-	if (player.getHealth() <= LOWEST_HEALTH)
+	// Updates the player every 60th of a second.
+
+	if (player.getHealth() <= LOWEST_HEALTH) // If the health is lower than or equal to zero, it changes the game state.
 	{
 		playerScoreTextGameOver.setString(userInput + " Score: " + std::to_string(score));
 		gameStates = GameScreens::YouLost;
 		backgroundMusic.play();
 	}
-
-	if (score >= MAX_SCORE)
+	 
+	if (score >= MAX_SCORE) // If the health is greater than or equal to 590, it changes the game state.
 	{
 		gameStates = GameScreens::YouWon;
 		backgroundMusic.play();
@@ -231,26 +259,37 @@ void Game::updatePlayer()
 	playerHealthText.setString(userInput + " Health: " + std::to_string(player.getHealth()));
 
 	player.move(cellType, score);
+
+	// Updates the player every 60th of a second.
 }
 
+/// <summary>
+/// This function updates the ghosts every 60th of a second.
+/// </summary>
 void Game::updateGhosts()
 {
+
+	// Updates the ghosts every 60th of a second.
+
 	for (int i = 0; i < MAX_GHOSTS; i++)
 	{
 		ghost[i].move(cellType);
 	}
+		
 
 	for (int i = 0; i < MAX_GHOSTS; i++)
 	{
-		if (ghost[i].getCol() == player.getCol() && ghost[i].getRow() == player.getRow())
+		if (ghost[i].getCol() == player.getCol() && ghost[i].getRow() == player.getRow()) // If the player is in the ghost row and col, then they have collided.
 		{
 			for (int j = 0; j < MAX_GHOSTS; j++)
 			{
-				ghost[j].setPosition(ghostRows[j], ghostCols[j]);
+				ghost[j].setPosition(ghostRows[j], ghostCols[j]); // Sets every ghost back to thier starting position.
 			}
-			player.playerCollisions();
+			player.ghostCollisions();
 		}
 	}
+
+	// Saves everything related to the ghosts and player.
 
 	saveData.open("ASSETS/SAVE_DATA/GameData.txt");
 
@@ -278,10 +317,19 @@ void Game::updateGhosts()
 	{
 		std::cout << "Error - unable to open the txt file. \n";
 	}
+
+	// Saves everything related to the ghosts and player.
+
+	// Updates the ghosts every 60th of a second.
 }
 
+/// <summary>
+/// This function updates the main menu every 60th of a second.
+/// </summary>
 void Game::updateMainMenuScreen()
 {
+	// Updates the main menu screen every 60th of a second.
+
 	if (gameStates == GameScreens::MainMenu)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
@@ -298,23 +346,35 @@ void Game::updateMainMenuScreen()
 			m_gameExit = true;
 		}
 	}
+
+	// Updates the main menu screen every 60th of a second.
 }
 
+/// <summary>
+/// This function updates the help screen every 60th of a second.
+/// </summary>
 void Game::updateHelpScreen()
 {
+	// Updates the help screen every 60th of a second.
+
 	if (gameStates == GameScreens::Help)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-		{
-			gameStates = GameScreens::MainMenu;
-		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) gameStates = GameScreens::MainMenu;
 	}
+
+	// Updates the help screen every 60th of a second.
 }
 
+/// <summary>
+/// This function updates the you lose screen every 60th of a second.
+/// </summary>
 void Game::updateYouLoseScreen()
 {
+	// Updates the you lose screen every 60th of a second.
+
 	if (gameStates == GameScreens::YouLost)
 	{
+		playerScoreTextGameOver.setString(userInput + " Score: " + std::to_string(score));
 		highestScoreText.setString(userInput + " highest score: " + std::to_string(highestScore));
 		if (score > highestScore)
 		{
@@ -337,11 +397,19 @@ void Game::updateYouLoseScreen()
 			gameStates = GameScreens::MainMenu;
 		}
 	}
+
+	// Updates the you lose screen every 60th of a second.
 }
 
+/// <summary>
+/// This function updates the you win screen every 60th of a second.
+/// </summary>
 void Game::updateYouWinScreen()
 {
+	// Updates the you win screen every 60th of a second.
+
 	highestScoreText.setString(userInput + " highest score: " + std::to_string(highestScore));
+	playerScoreTextGameOver.setString(userInput + " Score: " + std::to_string(score));
 	if (highestScore < score)
 	{
 		highestScore = score;
@@ -365,11 +433,17 @@ void Game::updateYouWinScreen()
 			gameStates = GameScreens::MainMenu;
 		}
 	}
+
+	// Updates the you win screen every 60th of a second.
 }
 
-
+/// <summary>
+/// This function displays everything on screen.
+/// </summary>
 void Game::render()
 {
+	// This draws everything on screen.
+
 	m_window.clear(); // This clears all the screen.
 
 	if (gameStates == GameScreens::GamePlay)
@@ -405,10 +479,17 @@ void Game::render()
 	}
 
 	m_window.display(); // This displays everything.
+
+	// This draws everything on screen.
 }
 
+/// <summary>
+/// This function draws everything for the help screen.
+/// </summary>
 void Game::drawHelpScreen()
 {
+	// Draws everything related with the help screen.
+
 	m_window.draw(helpGhostText);
 	m_window.draw(helpPacmanText);
 	m_window.draw(helpPelletText);
@@ -416,10 +497,17 @@ void Game::drawHelpScreen()
 	m_window.draw(helpPellet.getBody());
 	m_window.draw(helpPlayer.getBody());
 	m_window.draw(returnToMainMenuText);
+
+	// Draws everything related with the help screen.
 }
 
+/// <summary>
+/// This function draws everything for the gameplay screen.
+/// </summary>
 void Game::drawGameplayScreen()
 {
+	// Draws everything related with the gameplay screen.
+
 	for (int row = 0; row < MAX_ROWS; row++)
 	{
 		for (int col = 0; col < MAX_COLS; col++)
@@ -440,27 +528,45 @@ void Game::drawGameplayScreen()
 
 	m_window.draw(playerScoreTextGameplay);
 	m_window.draw(playerHealthText);
+
+	// Draws everything related with the gameplay screen.
 }
 
+/// <summary>
+/// This function draws everything for the you win screen.
+/// </summary>
 void Game::drawYouWinScreen()
 {
+	// Draws everything related with the you win screen.
+
 	m_window.draw(backgroundSprite);
 	m_window.draw(youWonText);
 	m_window.draw(playerScoreTextGameOver);
 	m_window.draw(highestScoreText);
 	m_window.draw(returnToMainMenuText);
+
+	// Draws everything related with the you win screen.
 }
 
+/// <summary>
+/// This function draws everything for the you lose screen.
+/// </summary>
 void Game::drawYouLoseScreen()
 {
+	// Draws everything related with the you lose screen.
+
 	m_window.draw(backgroundSprite);
 	m_window.draw(youLostText);
 	m_window.draw(highestScoreText);
 	m_window.draw(playerScoreTextGameOver);
 	m_window.draw(returnToMainMenuText);
+
+	// Draws everything related with the you lose screen.
 }
 
-
+/// <summary>
+/// This function handles all user created events.
+/// </summary>
 void Game::processEvents()
 {
 	sf::Event event; // This initialize's, the Event object into memory.
@@ -494,28 +600,32 @@ void Game::processEvents()
 	}
 }
 
+/// <summary>
+/// This function handles if the user presses anything on the keyboard for thier name.
+/// </summary>
+/// <param name="t_event"></param>
 void Game::UserEnterText(sf::Event t_event)
 {
-	if (t_event.type == sf::Event::TextEntered)
+	if (t_event.type == sf::Event::TextEntered) // If the user pressed something on the keyboard.
 	{
-		if (t_event.text.unicode == 8)
+		if (t_event.text.unicode == 8) // if the press backspace on the keyboard.
 		{
-			if (userInput != "")
+			if (userInput != "") // If the string is not empty.
 			{
-				userInput.erase(userInput.end() - 1);
+				userInput.erase(userInput.end() - 1); // delete a the last char on the string.
 				enterNameText.setString(playerInput + " " + userInput);
 			}
 		}
 		if ((t_event.text.unicode >= 'a' && t_event.text.unicode <= 'z' || t_event.text.unicode >= 'A' && t_event.text.unicode <= 'Z') || t_event.text.unicode == ' ')
 		{
-			if (userInput.length() <= MAX_NUMBER_OF_CHARACTERS)
+			if (userInput.length() <= MAX_NUMBER_OF_CHARACTERS) // Can only enter 10 characters.
 			{
 				userInput += t_event.text.unicode;
 				enterNameText.setString(playerInput + " " + userInput);
 			}
 		}
 	}
-	if (userInput != "")
+	if (userInput != "") // If it's not empty, start the game
 	{
 		if (sf::Event::KeyPressed == t_event.type) //user key press
 		{
@@ -526,7 +636,7 @@ void Game::UserEnterText(sf::Event t_event)
 			}
 		}
 	}
-	else
+	else // else don't.
 	{
 		if (sf::Event::KeyPressed == t_event.type)
 		{

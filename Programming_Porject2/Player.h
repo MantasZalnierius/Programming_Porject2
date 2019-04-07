@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 
-enum class  Direction
+enum class  Direction // Enum class for the directions for the player.
 {
 	Up,
 	Down,
@@ -19,27 +19,32 @@ enum class  Direction
 
 class Player
 {
+	// Member Variables 
+
 	sf::Sprite m_sprite;
 	sf::Texture m_texture;
 	Direction m_playerDirecrtions = Direction::None;
 	float m_speed;
 	bool m_isAlive;
-	int m_row;
-	int m_col;
 	sf::Vector2f m_velocity;
 	int health;
 	int cooldown;
-	sf::Time timeBetweenFrames = sf::seconds(0.25f);
+	int m_row;
+	int m_col;
+	sf::Time timeBetweenFrames = sf::seconds(0.25f); // Controls how fast the animation is for pacman.
 	sf::Clock TimeClock;
-	sf::IntRect pacManFrame = sf::IntRect{0, 0,  BIT_SIZE_FOR_ANIMATION -2 ,  BIT_SIZE_FOR_ANIMATION - 2 };
+	sf::IntRect pacManFrame = sf::IntRect{0, 0,  BIT_SIZE_FOR_ANIMATION -2 ,  BIT_SIZE_FOR_ANIMATION - 2 }; // This is the starting frame for pacman
 	sf::Sound eattingSound;
 	sf::SoundBuffer eattingSoundBuffer;
 	sf::Sound hittingGhostSound;
 	sf::SoundBuffer hittingGhostSoundBuffer;
 
+	// Member Variables
 
 
 public:
+	// Member Functions
+
 	Player();
 	~Player();
 	void setUpSprite();
@@ -58,7 +63,9 @@ public:
 	inline int getHealth() { return health; }
 	void setUpPlayerForHelpScreen();
 	void saveDataToFile(std::ofstream &t_outputFile);
-	void playerCollisions();
+	void ghostCollisions();
+
+	// Member Functions
 };
 
 #endif

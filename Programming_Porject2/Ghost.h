@@ -9,7 +9,7 @@
 #include <fstream>
 
 
-enum class GhostDirection
+enum class GhostDirection // Enum class for the ghost directions.
 {
 	Left,
 	Right,
@@ -20,6 +20,8 @@ enum class GhostDirection
 
 class Ghost
 {
+	// Member variables 
+
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
 	GhostDirection m_direction;
@@ -32,7 +34,12 @@ class Ghost
 	int cooldown;
 	int ghostCooldown;
 
+	// Member variables
+
 public:
+
+	// Member functions
+
 	Ghost();
 	~Ghost();
 	void setUpSprite();
@@ -56,6 +63,8 @@ public:
 	inline int getdir() { return randomDirection; }
 	void setUpPositionForGhostForHelpScreen();
 	void saveDataToFile(std::ofstream &t_outputFile);
+
+	// Member functions
 };
 
 #endif

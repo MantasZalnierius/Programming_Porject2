@@ -1,6 +1,7 @@
 #ifndef GLOBALS
 #define GLOBALS
 
+// All the const value I will use in my game 
 
 static const int MAX_ROWS = 25;
 static const int MAX_COLS = 25;
@@ -28,6 +29,8 @@ static const sf::Vector2f PELLET_FOR_HELP_SCREEN_POSITION{ 50.0f, 350.0f };
 static const sf::Vector2f PLAYER_FOR_HELP_SCREEN_POSITION{ 50.0f, 600.0f };
 static const sf::Vector2f GHOST_FOR_HELP_SCREEN_POSITION{ 50.0f, 100.0f };
 static const sf::Color WHITE(sf::Color::White);
+
+// All the const value I will use in my game 
 
 #endif
 

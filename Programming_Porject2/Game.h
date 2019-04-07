@@ -12,7 +12,7 @@
 #include <fstream>
 #include <sstream>
 
-enum class GameScreens
+enum class GameScreens // Enum class for all the gamescreens in the game.
 {
 	EnterName,
 	MainMenu,
@@ -24,19 +24,32 @@ enum class GameScreens
 
 class Game
 {
+	// Member variables
+
 	std::string playerInput;
-	std::string userInput;
-	bool m_gameExit;
-	int score;
-	int highestScore;
+	std::string userInput; // Stores the user names for the game.
+
+	bool m_gameExit; // controls if the game is turned off.
+
+	int score; // Stores the current score of the player
+	int highestScore; // Stores the highest score the player has achived.
+	int ghostRows[MAX_GHOSTS]{ 2, 10, 15, 22 }; // This is the starting Y position of all the ghosts.
+	int ghostCols[MAX_GHOSTS]{ 2, 7, 19, 22 }; // This is the starting X position of all the ghosts.
+
+
 	sf::RenderWindow m_window;
+	
+	// Intiate all the objects in the game. 
 	Cell cellType[MAX_ROWS][MAX_COLS];
 	Player player;
 	Ghost ghost[MAX_GHOSTS];
 	Ghost helpGhost;
 	Player helpPlayer;
 	Cell  helpPellet;
+	// Intiate all the objects in the game. 
+
 	GameScreens gameStates = GameScreens::MainMenu;
+
 	sf::Font font;
 	sf::Text enterNameText;
 	sf::Text playerScoreTextGameplay;
@@ -50,15 +63,18 @@ class Game
 	sf::Text youLostText;
 	sf::Text youWonText;
 	sf::Text highestScoreText;
-	std::ofstream saveData;
+
+	std::ofstream saveData; 
+
 	sf::Music backgroundMusic;
 	sf::Sprite backgroundSprite;
 	sf::Texture backgroundTexture;
-	int ghostRows[MAX_GHOSTS]{ 2, 10, 15, 22 };
-	int ghostCols[MAX_GHOSTS]{ 2, 7, 19, 22 };
 
+	// Member variables
 
-public:	  // declaration of member functions	
+public:
+	// Member functions
+
 	Game(); // This is the default constructor for the game class.
 	~Game(); // This is the default destructor for the game class.
 	void	loadContent(); // This is the default constructor for the game class.
@@ -81,6 +97,8 @@ public:	  // declaration of member functions
 	void	drawGameplayScreen();
 	void	drawYouWinScreen();
 	void	drawYouLoseScreen();
+
+	// Member functions
 
 };
 
